@@ -1,3 +1,4 @@
 // Parameters For Measurement Space
 SCENE_DIMENSION=2
-
+SCENE_TYPE=Rectangle
+SCENE_RANGE=100

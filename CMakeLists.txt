@@ -101,21 +101,31 @@ INCLUDE_DIRECTORIES(${INC_PATH})
 # AUX_SOURCE_DIRECTORY(src/detection/ graph_src)
 # add_library(graph_share SHARED ${graph_src})
 
+AUX_SOURCE_DIRECTORY(src/meas/ meas_SRC)
+add_library(meas_share SHARED ${meas_SRC})
+
+AUX_SOURCE_DIRECTORY(src/common/ common_SRC)
+add_library(common_share SHARED ${common_SRC})
 
 #SET(track_SRC src/track/run_track.cc
 #              src/track/track.cc
 #              src/track/get_target.cc)
 AUX_SOURCE_DIRECTORY(src/track/ track_SRC)
+add_library(track_share SHARED ${track_SRC})
+
 
 SET(track_LIBS ${Boost_LIBRARIES}
-#                    ${PCL_LIBRARIES}
-#                    ${OpenCV_LIBS}
-#                    ${OpenGL_LIBRARIES}
-#                    ${GLUT_LIBRARY}
+                # ${PCL_LIBRARIES}
+                # ${OpenCV_LIBS}
+                # ${OpenGL_LIBRARIES}
+                # ${GLUT_LIBRARY}
+                # ${PROTOBUF_LIBRARIES}
+                # ${OpenCV_LIBRARIES}
                 glog
                 fmt::fmt
-                ${OpenCV_LIBRARIES}
-                ${PROTOBUF_LIBRARIES}
+                meas_share
+                common_share
+                track_share
                 )
 
 #LINK_LIBRARIES(#${OpenCV_LIBS}

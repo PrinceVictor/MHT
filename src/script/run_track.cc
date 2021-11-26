@@ -2,8 +2,10 @@
 
 #include "log/log.h"
 #include "track/mht.h"
+#include "meas/meas.h"
 
 using mht_mht::MHT;
+using mht_measurement::Measurement;
 
 int main(int argc, char *argv[]){
 
@@ -13,6 +15,8 @@ int main(int argc, char *argv[]){
     google::SetStderrLogging(google::INFO);
 
     LOG_INFO("---RUNNING THE TRACKING TASK---");
+
+    Measurement measurement("./param/meas.txt");
 
     google::ShutdownGoogleLogging();
 
