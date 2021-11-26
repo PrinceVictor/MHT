@@ -6,6 +6,6 @@
 
 #define FORMAT_STRING fmt::format
 #define LOG_FUNCTION LOG(INFO) << __FUNCTION__ << " | "
-#define LOG_OUTPUT LOG_FUNCTION << FORMAT_STRING
+#define LOG_INFO LOG_FUNCTION << FORMAT_STRING
 
 #endif // LOG_H

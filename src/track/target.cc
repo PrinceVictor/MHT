@@ -2,15 +2,15 @@
 // Created by Hongbin Zhou on 2021/11/26
 // Author: Hongbin Zhou
 
-#include "track/kalman.h"
+#include "track/target.h"
 
-namespace mht_kalman {
+namespace mht_target {
 
-Kalman::Kalman(){
-
+Target::Target(){
+    
 }
 
-Kalman::~Kalman(){
+Target::~Target(){
 
 }
 

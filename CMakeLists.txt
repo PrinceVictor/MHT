@@ -95,11 +95,11 @@ else()
     message(STATUS "NO DEBUG")
 endif(USE_DEBUG)
 
-set(INC_PATH inc msg inc/hungarian)
+set(INC_PATH inc)
 INCLUDE_DIRECTORIES(${INC_PATH})
 
-AUX_SOURCE_DIRECTORY(src/detection/ graph_src)
-add_library(graph_share SHARED ${graph_src})
+# AUX_SOURCE_DIRECTORY(src/detection/ graph_src)
+# add_library(graph_share SHARED ${graph_src})
 
 
 #SET(track_SRC src/track/run_track.cc
@@ -124,7 +124,7 @@ SET(track_LIBS ${Boost_LIBRARIES}
 #               glog
 #               fmt::fmt)
 
-add_executable(run_track ${track_SRC})
+add_executable(run_track src/script/run_track.cc ${track_SRC})
 target_link_libraries(run_track ${track_LIBS})
 
 

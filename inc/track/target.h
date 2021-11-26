@@ -2,23 +2,24 @@
 // Created by Hongbin Zhou on 2021/11/26
 // Author: Hongbin Zhou
 
-#ifndef MHT_KALMAN_H
-#define MHT_KALMAN_H
+#ifndef MHT_TARGET_H
+#define MHT_TARGET_H
 
 #include "log/log.h"
 
-namespace mht_mht {
+namespace mht_target {
 
 
-class MHT {
-    
+class Target {
+
 public:
 
-    MHT();
-
-    ~MHT();
+    Target();
+  
+    ~Target();
 
 private:
+
 
 };
 
