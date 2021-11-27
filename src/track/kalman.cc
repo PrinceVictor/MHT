@@ -4,7 +4,7 @@
 
 #include "track/kalman.h"
 
-namespace mht_kalman {
+namespace mht_track {
 
 Kalman::Kalman(){
 

@@ -2,10 +2,14 @@
 // Created by Hongbin Zhou on 2021/11/26
 // Author: Hongbin Zhou
 
-#include "meas/meas.h"
+#include "meas/measure.h"
 #include "common/utils.h"
 
 namespace mht_measurement {
+
+MeasParams::MeasParams(){
+    
+}
 
 void MeasParams::set_params(const string& key, const string& value){
 

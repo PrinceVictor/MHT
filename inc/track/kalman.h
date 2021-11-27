@@ -8,7 +8,7 @@
 #include "log/log.h"
 #include <eigen3/Eigen/Eigen>
 
-namespace mht_kalman {
+namespace mht_track {
 
 
 class Kalman {

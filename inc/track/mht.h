@@ -7,7 +7,7 @@
 
 #include "log/log.h"
 
-namespace mht_mht {
+namespace mht_track {
 
 
 class MHT {

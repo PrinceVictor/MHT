@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-namespace mht_utils {
+namespace mht_common {
 
 std::vector<std::string> str_split(const std::string&, const std::string&);
 

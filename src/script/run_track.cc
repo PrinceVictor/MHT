@@ -4,7 +4,7 @@
 #include "track/mht.h"
 #include "meas/meas.h"
 
-using mht_mht::MHT;
+using mht_track::MHT;
 using mht_measurement::Measurement;
 
 int main(int argc, char *argv[]){

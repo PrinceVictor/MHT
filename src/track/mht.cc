@@ -4,7 +4,7 @@
 
 #include "track/mht.h"
 
-namespace mht_mht {
+namespace mht_track {
 
 MHT::MHT(){
 
