@@ -12,6 +12,7 @@
 
 #include "log/log.h"
 #include "meas/meas_param.h"
+#include "common/random.h"
 
 namespace mht_measurement {
 
@@ -29,13 +30,14 @@ public:
 
     void load_parameters(const string& param_path);
 
+    void generate_measures();
+
 private:
 
     std::map<string, string> load_param_file(const string& param_path);
 
     MeasParams _meas_params;
     
-
 };
 
 }

@@ -7,31 +7,13 @@
 
 namespace mht_measurement {
 
-MeasParams::MeasParams(){
-    
-}
-
-void MeasParams::set_params(const string& key, const string& value){
-
-    switch(key){
-        case "SCENE_DIMENSION":
-            break;
-        case "SCENE_TYPE":
-            break;
-        case "SCENE_RANGE":
-            break;
-    }
-}
-
 Measurement::Measurement(){}
 
 Measurement::Measurement(const string& param_path){
     
     LOG_INFO("Construct Measurement Space");
 
-    load_parameters(param_path);
-
-    
+    load_parameters(param_path);    
 }
 
 void Measurement::load_parameters(const string& param_path){
@@ -43,7 +25,10 @@ void Measurement::load_parameters(const string& param_path){
             _meas_params.set_params(it->first, it->second);
         }
     }
+}
 
+void Measurment::generate_measures(){
+    
 }
 
 std::map<string, string> Measurement::load_param_file(const string& param_path){
