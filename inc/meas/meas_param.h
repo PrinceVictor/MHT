@@ -2,8 +2,8 @@
 // Created by Hongbin Zhou on 2021/11/27
 // Author: Hongbin Zhou
 
-#ifndef MHT_MEAS_H
-#define MHT_MEAS_H
+#ifndef MHT_MEAS_PARAM_H
+#define MHT_MEAS_PARAM_H
 
 #include <map>
 #include <string>
@@ -22,6 +22,10 @@ public:
     MeasParams();
 
     void set_params(const string& key, const string& value);
+
+    int get_sample_num();
+
+    int get_expect_noise();
 
 public:
     //SCENE DIMENSION: default=2 for x,y
@@ -42,6 +46,8 @@ public:
     float _TIME_END=1;
     //TIME START: unit(m/s)
     float _INIT_SPEED_RANGE=10;
+    //EXPECT OF NOISE: default=1
+    int _EXPECT_NOISE=1;
     //@todo: SENSOR POS
 
 private:

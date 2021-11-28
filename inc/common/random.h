@@ -7,7 +7,8 @@
 
 #include <random>
 #include <chrono>
-#icnlude <vector>
+#include <vector>
+
 
 #include "log/log.h"
 

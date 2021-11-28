@@ -1,11 +1,15 @@
 #include <iostream>
+#include <memory>
 
 #include "log/log.h"
+#include "meas/measure.h"
+#include "common/random.h"
 #include "track/mht.h"
-#include "meas/meas.h"
 
-using mht_track::MHT;
+using mht_common::Random;
 using mht_measurement::Measurement;
+using mht_track::MHT;
+
 
 int main(int argc, char *argv[]){
 
@@ -16,7 +20,10 @@ int main(int argc, char *argv[]){
 
     LOG_INFO("---RUNNING THE TRACKING TASK---");
 
-    Measurement measurement("./param/meas.txt");
+    std::shared_ptr<Random> random = std::make_shared<Random>();
+    
+    std::shared_ptr<Measurement> measurement = std::make_shared<Measurement>("./param/meas.txt");
+    measurement->set_random(random);
 
     google::ShutdownGoogleLogging();
 

@@ -9,6 +9,10 @@
 #include <fstream>
 #include <map>
 #include <string>
+#include <vector>
+#include <memory>
+
+#include <eigen3/Eigen/Eigen>
 
 #include "log/log.h"
 #include "meas/meas_param.h"
@@ -17,6 +21,7 @@
 namespace mht_measurement {
 
 using std::string;
+using std::vector;
 
 class Measurement {
 
@@ -28,13 +33,25 @@ public:
 
     ~Measurement();
 
+    void set_random(std::shared_ptr<mht_common::Random>& random);
+
     void load_parameters(const string& param_path);
+
+    void generate_targets();
+
+    void generate_noises();
 
     void generate_measures();
 
 private:
 
     std::map<string, string> load_param_file(const string& param_path);
+
+public:
+
+private:
+
+    std::shared_ptr<mht_common::Random> _random;
 
     MeasParams _meas_params;
     
