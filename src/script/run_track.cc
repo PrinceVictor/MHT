@@ -24,6 +24,12 @@ int main(int argc, char *argv[]){
     
     std::shared_ptr<Measurement> measurement = std::make_shared<Measurement>("./param/meas.txt", random);
 
+    auto measures = measurement->get_measurements();
+
+    for(auto it=measures.begin(); it!=measures.end(); it++){
+        std::cout<< it->first <<'\t' << it->second.size() <<std::endl;
+    }
+
     google::ShutdownGoogleLogging();
 
     return 0;

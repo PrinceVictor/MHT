@@ -24,8 +24,7 @@ Measurement::Measurement(const string& param_path, const std::shared_ptr<mht_com
     
     set_random(random);
 
-    seq_data measures, targets, noises;
-    generate_measures(measures, targets, noises);
+    generate_measures();
 }
 
 void Measurement::load_parameters(const string& param_path){
@@ -44,7 +43,54 @@ void Measurement::set_random(const std::shared_ptr<mht_common::Random>& random){
     _random = random;
 }
 
-void Measurement::generate_noises(seq_data& noise_pos){
+const std::map<float, vector<Eigen::VectorXf>>& Measurement::get_measurements(){
+
+    return _measures;
+}
+
+void Measurement::generate_measures(){
+
+    _targets.clear(); _noises.clear();
+    seq_data measures;
+
+    generate_noises();
+    generate_targets();
+        
+    if(_targets.size() != _noises.size()){
+        throw "The Length of Target is not equal with Noise!";
+    }
+
+    int seq_len = _targets.size();
+    int add_noise_num = seq_len*_targets[0].size();
+    float noise_std = _meas_params._MEASUREMENT_NOISE;
+    int scene_dim = _meas_params._SCENE_DIMENSION;
+    float time_start = _meas_params._TIME_START;
+    float delta_t = _meas_params._SAMPLE_INTERVAL;
+
+    vector<float> add_noises(add_noise_num);
+    _random->get_normal_randoms(add_noises, 0, noise_std, add_noise_num*scene_dim);
+    
+    int start_idx=0;
+    measures.resize(seq_len);
+    for(int i = 0; i < seq_len; i++){
+        measures[i].resize(_noises[i].size()+_targets[i].size());
+        
+        Eigen::VectorXf temp_X(scene_dim);
+        for(int j = 0; j < _targets[i].size(); j++){
+            for(int k = 0; k < scene_dim; k++){
+                temp_X(k) = _targets[i][j](k)+add_noises[start_idx++];
+            }
+            measures[i][j] = temp_X;
+        }
+
+        for(int j=0; j<_noises[i].size(); j++){
+            measures[i][j+_targets[i].size()] = _noises[i][j];
+        }
+        _measures[time_start+i*delta_t].swap(measures[i]);
+    }
+}
+
+void Measurement::generate_noises(){
 
     int expect_nosie = _meas_params.get_expect_noise();
     int sample_num = _meas_params.get_sample_num();
@@ -60,9 +106,9 @@ void Measurement::generate_noises(seq_data& noise_pos){
     _random->get_uniform_randoms(noise_pos_list, 0, scene_range, total_noise*scene_dim);
 
     int start_idx=0;
-    noise_pos.resize(sample_num);
+    _noises.resize(sample_num);
     for(int i = 0; i < noise_nums.size(); i++){
-        noise_pos[i].resize(noise_nums[i]);
+        _noises[i].resize(noise_nums[i]);
         
         for(int j = 0; j < noise_nums[i]; j++){
 
@@ -70,12 +116,12 @@ void Measurement::generate_noises(seq_data& noise_pos){
             for(int k = 0; k < _meas_params._SCENE_DIMENSION; k++)
                 temp_noise_pos(k) = noise_pos_list[start_idx++];
 
-            noise_pos[i][j] = temp_noise_pos;
+            _noises[i][j] = temp_noise_pos;
         }
     }
 }
 
-void Measurement::generate_targets(seq_data& targets_state){
+void Measurement::generate_targets(){
 
     int sample_num = _meas_params.get_sample_num();
     float delta_t = _meas_params._SAMPLE_INTERVAL;
@@ -89,44 +135,23 @@ void Measurement::generate_targets(seq_data& targets_state){
     _random->get_uniform_randoms(init_target_pos, 0, scene_range, target_num*scene_dim);
     _random->get_uniform_randoms(init_target_veloc, 0, target_speed_range, target_num*scene_dim);
 
-    targets_state.assign(sample_num, vector<Eigen::VectorXf>(target_num, Eigen::VectorXf(scene_dim*2)));
+    _targets.assign(sample_num, vector<Eigen::VectorXf>(target_num, Eigen::VectorXf(scene_dim*2)));
     auto motion_trans_mat = mht_common::Motion::CV(scene_dim, delta_t);
     
     for(int i=0; i<target_num; i++){
         for(int j=0; j<sample_num; j++){
             if(j == 0){
                 for(int k=0; k<scene_dim; k++){
-                    targets_state[j][i](k) = init_target_pos[k];
-                    targets_state[j][i](k+scene_dim) = init_target_veloc[k];
+                    _targets[j][i](k) = init_target_pos[k];
+                    _targets[j][i](k+scene_dim) = init_target_veloc[k];
                 }
             }
             else{
-                targets_state[j][i] = motion_trans_mat*targets_state[j-1][i];
+                _targets[j][i] = motion_trans_mat*_targets[j-1][i];
             }
         }
     }
 }
-
-void Measurement::generate_measures(seq_data& measures, seq_data& targets, seq_data& noises){
-
-    generate_noises(noises);
-    generate_targets(targets);
-        
-    if(targets.size() != noises.size()){
-        throw "The Length of Target is not equal with Noise!";
-    }
-
-    
-
-    int data_len = targets.size();
-
-    measures.resize(data_len);
-    // for(int )
-
-    
-}
-
-void M
 
 std::map<string, string> Measurement::load_param_file(const string& param_path){
 

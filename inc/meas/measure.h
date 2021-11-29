@@ -43,19 +43,25 @@ public:
 
     void load_parameters(const string& param_path);
 
-    void generate_noises(seq_data& noises_pos);
+    void generate_measures();
 
-    void generate_targets(seq_data& targets_state);
-
-    void generate_measures(seq_data& measures, seq_data& targets, seq_data& noises);
+    const std::map<float, vector<Eigen::VectorXf>>& get_measurements();
 
 private:
+
+    void generate_noises();
+
+    void generate_targets();
 
     std::map<string, string> load_param_file(const string& param_path);
 
 private:
 
     std::shared_ptr<mht_common::Random> _random;
+
+    seq_data _targets, _noises;
+
+    std::map<float, vector<Eigen::VectorXf>> _measures;
 
     MeasParams _meas_params;
     
