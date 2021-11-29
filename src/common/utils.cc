@@ -4,7 +4,7 @@
 
 #include "common/utils.h"
 
-namespace mht_utils {
+namespace mht_common {
 
 std::vector<std::string> str_split(const std::string& input_str,  const std::string& match_str=" "){
     std::vector<std::string> result;

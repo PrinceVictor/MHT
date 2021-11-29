@@ -47,7 +47,9 @@ public:
     //TIME START: unit(m/s)
     float _INIT_SPEED_RANGE=10;
     //EXPECT OF NOISE: default=1
-    int _EXPECT_NOISE=1;
+    int _EXPECT_NOISE=2;
+    //EXPECT OF NOISE: default=1
+    float _MEASUREMENT_NOISE=3;
     //@todo: SENSOR POS
 
 private:

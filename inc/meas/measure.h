@@ -11,12 +11,14 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <numeric>
 
 #include <eigen3/Eigen/Eigen>
 
 #include "log/log.h"
-#include "meas/meas_param.h"
 #include "common/random.h"
+#include "common/motion.h"
+#include "meas/meas_param.h"
 
 namespace mht_measurement {
 
@@ -26,28 +28,30 @@ using std::vector;
 class Measurement {
 
 public:
+
+    typedef vector<vector<Eigen::VectorXf>> seq_data;
   
     Measurement();
 
     Measurement(const string& param_path);
 
+    Measurement(const string& param_path, const std::shared_ptr<mht_common::Random>& random);
+
     ~Measurement();
 
-    void set_random(std::shared_ptr<mht_common::Random>& random);
+    void set_random(const std::shared_ptr<mht_common::Random>& random);
 
     void load_parameters(const string& param_path);
 
-    void generate_targets();
+    void generate_noises(seq_data& noises_pos);
 
-    void generate_noises();
+    void generate_targets(seq_data& targets_state);
 
-    void generate_measures();
+    void generate_measures(seq_data& measures, seq_data& targets, seq_data& noises);
 
 private:
 
     std::map<string, string> load_param_file(const string& param_path);
-
-public:
 
 private:
 

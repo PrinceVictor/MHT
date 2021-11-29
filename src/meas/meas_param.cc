@@ -6,17 +6,18 @@
 
 namespace mht_measurement {
 
-const static std::vector<string> MeasParams::_keys = 
+const std::vector<string> MeasParams::_keys = 
     {"SCENE_DIMENSION", "SCENE_TYPE", "SCENE_RANGE", 
      "SCENE_TARGET", "TARGET_MOTION", "SAMPLE_INTERVAL", 
-     "TIME_START", "TIME_END", "INIT_SPEED_RANGE", "EXPECT_NOISE"};
+     "TIME_START", "TIME_END", "INIT_SPEED_RANGE", 
+     "EXPECT_NOISE", "MEASUREMENT_NOISE"};
 
 MeasParams::MeasParams(){
 
     LOG_INFO("INIT THE MEASUREMENT PARAMETERS");
 
     for(int i=0; i<_keys.size(); i++){
-        _params[_keys[i]] = i;
+        _param_key_dict[_keys[i]] = i;
     }
     
 }
@@ -44,6 +45,7 @@ void MeasParams::set_params(const string& key, const string& value){
         case 7: _TIME_END=std::stof(value);break;
         case 8: _INIT_SPEED_RANGE=std::stof(value);break;
         case 9: _EXPECT_NOISE=std::stoi(value);break;
+        case 10: _MEASUREMENT_NOISE=std::stof(value);break;
     }
 }
 

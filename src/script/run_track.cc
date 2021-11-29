@@ -22,8 +22,7 @@ int main(int argc, char *argv[]){
 
     std::shared_ptr<Random> random = std::make_shared<Random>();
     
-    std::shared_ptr<Measurement> measurement = std::make_shared<Measurement>("./param/meas.txt");
-    measurement->set_random(random);
+    std::shared_ptr<Measurement> measurement = std::make_shared<Measurement>("./param/meas.txt", random);
 
     google::ShutdownGoogleLogging();
 

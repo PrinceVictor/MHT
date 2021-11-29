@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 project(MHT)
-set(CMAKE_BUILD_TYPE Relese)
+set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
@@ -101,11 +101,12 @@ INCLUDE_DIRECTORIES(${INC_PATH})
 # AUX_SOURCE_DIRECTORY(src/detection/ graph_src)
 # add_library(graph_share SHARED ${graph_src})
 
-AUX_SOURCE_DIRECTORY(src/meas/ meas_SRC)
-add_library(meas_share SHARED ${meas_SRC})
-
 AUX_SOURCE_DIRECTORY(src/common/ common_SRC)
 add_library(common_share SHARED ${common_SRC})
+
+AUX_SOURCE_DIRECTORY(src/meas/ meas_SRC)
+add_library(meas_share SHARED ${meas_SRC})
+# target_link_libraries(meas_share common_share)
 
 #SET(track_SRC src/track/run_track.cc
 #              src/track/track.cc
@@ -134,7 +135,7 @@ SET(track_LIBS ${Boost_LIBRARIES}
 #               glog
 #               fmt::fmt)
 
-add_executable(run_track src/script/run_track.cc ${track_SRC})
+add_executable(run_track src/script/run_track.cc)
 target_link_libraries(run_track ${track_LIBS})
 
 
