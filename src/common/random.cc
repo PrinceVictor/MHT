@@ -9,10 +9,9 @@ namespace mht_common {
 Random::Random(){
 
     LOG_INFO("Construct RANDOM GENERATOR");
-
-    auto curr_seed = std::chrono::system_clock::now().time_since_epoch().count();
-    _random_engine.seed(curr_seed);
+    
 }
 
+std::default_random_engine Random::_random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
 }

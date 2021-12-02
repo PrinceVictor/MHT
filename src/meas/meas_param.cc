@@ -16,23 +16,27 @@ MeasParams::MeasParams(){
 
     LOG_INFO("INIT THE MEASUREMENT PARAMETERS");
 
-    for(int i=0; i<_keys.size(); i++){
-        _param_key_dict[_keys[i]] = i;
-    }
-    
+    init_key_dict(_keys);
 }
+
+MeasParams::MeasParams(const string& param_path){
+
+    LOG_INFO("INIT THE MEASUREMENT PARAMETERS");
+
+    init_key_dict(_keys);
+
+    load_parameters(param_path);
+}
+
 
 int MeasParams::get_sample_num(){
 
     return std::floor((_TIME_END-_TIME_START)/_SAMPLE_INTERVAL);
 }
 
-int MeasParams::get_expect_noise(){
-    
-    return _EXPECT_NOISE;
-}
-
 void MeasParams::set_params(const string& key, const string& value){
+    
+    if(_param_key_dict.count(key) == 0) return;
 
     switch(_param_key_dict[key]){
         case 0: _SCENE_DIMENSION=std::stoi(value);break;

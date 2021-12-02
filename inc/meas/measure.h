@@ -24,6 +24,7 @@ namespace mht_measurement {
 
 using std::string;
 using std::vector;
+using mht_common::Random;
 
 class Measurement {
 
@@ -39,10 +40,6 @@ public:
 
     ~Measurement();
 
-    void set_random(const std::shared_ptr<mht_common::Random>& random);
-
-    void load_parameters(const string& param_path);
-
     void generate_measures();
 
     const std::map<float, vector<Eigen::VectorXf>>& get_measurements();
@@ -57,13 +54,11 @@ private:
 
 private:
 
-    std::shared_ptr<mht_common::Random> _random;
-
     seq_data _targets, _noises;
 
     std::map<float, vector<Eigen::VectorXf>> _measures;
 
-    MeasParams _meas_params;
+    MeasParams _params;
     
 };
 

@@ -7,7 +7,7 @@
 
 #include "log/log.h"
 
-namespace mht_track {
+namespace mht_tracker {
 
 
 class Target {

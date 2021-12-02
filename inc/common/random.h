@@ -21,44 +21,44 @@ public:
     Random();
 
     template<typename T>
-    void get_uniform_randoms(std::vector<T>& result, float min=0.0, float max=1.0, int num=1){
+    static void get_uniform_randoms(std::vector<T>& result, float min=0.0, float max=1.0, int num=1){
     
         if(num < 1) return;
 
         result.resize(num);
         std::uniform_real_distribution<T> distribution(min,max);
         for(int i = 0; i < num; ++i){
-            result[i] = distribution(_random_engine);
+            result[i] = distribution(Random::_random_engine);
         }
     }
 
     template<typename T>
-    void get_normal_randoms(std::vector<T>& result, float mean=0, float variance=1, int num=1){
+    static void get_normal_randoms(std::vector<T>& result, float mean=0, float variance=1, int num=1){
         
         if(num < 1) return;
 
         result.resize(num);
         std::normal_distribution<T> distribution(mean, variance);
         for(int i = 0; i < num; ++i){
-            result[i] = distribution(_random_engine);
+            result[i] = distribution(Random::_random_engine);
         }
     }
 
     template<typename T>
-    void get_possion_randoms(std::vector<T>& result, float expect, int num=1){
+    static void get_possion_randoms(std::vector<T>& result, float expect, int num=1){
         
         if(num < 1) return;
 
         result.resize(num);
         std::poisson_distribution<T> distribution(expect);
         for(int i = 0; i < num; ++i){
-            result[i] = distribution(_random_engine);
+            result[i] = distribution(Random::_random_engine);
         }
     }
 
 private:
 
-    std::default_random_engine _random_engine;
+    static std::default_random_engine _random_engine;
 
 };
 

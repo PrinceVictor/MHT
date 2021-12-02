@@ -4,11 +4,11 @@
 #include "log/log.h"
 #include "meas/measure.h"
 #include "common/random.h"
-#include "track/mht.h"
+#include "tracker/mht.h"
 
 using mht_common::Random;
 using mht_measurement::Measurement;
-using mht_track::MHT;
+using mht_tracker::MHT;
 
 
 int main(int argc, char *argv[]){
@@ -20,9 +20,8 @@ int main(int argc, char *argv[]){
 
     LOG_INFO("---RUNNING THE TRACKING TASK---");
 
-    std::shared_ptr<Random> random = std::make_shared<Random>();
-    
-    std::shared_ptr<Measurement> measurement = std::make_shared<Measurement>("./param/meas.txt", random);
+    std::shared_ptr<Measurement> measurement = std::make_shared<Measurement>("./param/PARAMS.txt");
+    std::shared_ptr<MHT> MHT_tracker = std::make_shared<MHT>("./param/PARAMS.txt");
 
     auto measures = measurement->get_measurements();
 

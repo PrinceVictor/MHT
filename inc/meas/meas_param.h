@@ -5,27 +5,27 @@
 #ifndef MHT_MEAS_PARAM_H
 #define MHT_MEAS_PARAM_H
 
-#include <map>
-#include <string>
-#include <vector>
-
 #include "log/log.h"
+#include "common/param.h"
+#include <iostream>
 
 namespace mht_measurement {
 
 using std::string;
 
-class MeasParams{
+class MeasParams: public mht_common::Parameters {
 
 public:
     
     MeasParams();
 
-    void set_params(const string& key, const string& value);
+    MeasParams(const string& param_path);
 
     int get_sample_num();
 
-    int get_expect_noise();
+protected:
+
+    void set_params(const string& key, const string& value);
 
 public:
     //SCENE DIMENSION: default=2 for x,y
@@ -55,7 +55,6 @@ public:
 private:
     
     const static std::vector<string> _keys;
-    std::map<string, int> _param_key_dict;
 
 };
 

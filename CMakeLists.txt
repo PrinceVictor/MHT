@@ -111,8 +111,8 @@ add_library(meas_share SHARED ${meas_SRC})
 #SET(track_SRC src/track/run_track.cc
 #              src/track/track.cc
 #              src/track/get_target.cc)
-AUX_SOURCE_DIRECTORY(src/track/ track_SRC)
-add_library(track_share SHARED ${track_SRC})
+AUX_SOURCE_DIRECTORY(src/tracker/ tracker_SRC)
+add_library(tracker_share SHARED ${tracker_SRC})
 
 
 SET(track_LIBS ${Boost_LIBRARIES}
@@ -126,7 +126,7 @@ SET(track_LIBS ${Boost_LIBRARIES}
                 fmt::fmt
                 meas_share
                 common_share
-                track_share
+                tracker_share
                 )
 
 #LINK_LIBRARIES(#${OpenCV_LIBS}
