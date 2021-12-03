@@ -26,8 +26,21 @@ protected:
 public:
     //SCENE DIMENSION: default=2 for x,y
     int _SCENE_DIMENSION=2;
+    //PRUN SCAN
+    int N_SCAN=2;
     //PROBABILITY of DETECTION
     float _P_DETECTION=0.9;
+    //TIME INTERVAL
+    float _DELTA_T=0.1;
+    //POS VARIANCE
+    float _POSITION_VAR=1;
+    //SPEED VARIANCE
+    float _VELOCITY_VAR=3;
+    //MEASUREMENT NOISE
+    float _MEAS_VAR=5;
+    //MEASUREMENT NOISE
+    float _STATE_VAR=10;
+
 
 
 private:

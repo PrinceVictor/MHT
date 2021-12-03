@@ -11,13 +11,15 @@
 namespace mht_tracker {
 
 
+
 class Target: protected Kalman {
 
 public:
 
     Target();
 
-    Target(const Eigen::VectorXf& meas);
+    Target(const Eigen::VectorXf& meas, const float& r, const float& p, 
+           const vector<float>& q, const float& delta_t);
   
     ~Target();
 

@@ -22,14 +22,22 @@ void Kalman::initMatrix(const int& dim){
     _R = Eigen::MatrixXf::Identity(dim, dim);
 }
 
-void Kalman::initParams(const float& r, const float& p, const float& pos_q, const float& velo_q){
+void Kalman::initParams(const Eigen::VectorXf& meas, const float& r, const float& p, 
+                        const vector<float>& q, const float& delta_t){
 
+    int dim = _R.rows();
+
+    for(int i = 0; i < dim; i++){
+        _X(i*dim) = meas(i);
+        _F(i, i+dim) = delta_t;
+    }
+    
     _P = _P*p;
     _R = _R*r;
-    int dim = _R.rows();
-    _Q.topLeftCorner(dim, dim) = _Q.topLeftCorner(dim, dim)*pos_q;
-    _Q.bottomRightCorner(dim, dim) = _Q.bottomRightCorner(dim, dim)*velo_q;
-
+    
+    for(int i = 0; i < q.size(); i++){
+        _Q.block(i, i, dim, dim) = _Q.block(i, i, dim, dim)*q[i];
+    }
 }
 
 void Kalman::predict(){

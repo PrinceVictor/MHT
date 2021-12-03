@@ -9,10 +9,15 @@ namespace mht_tracker {
 Target::Target(){
 }
 
-Target::Target(const Eigen::VectorXf& meas){
+Target::Target(const Eigen::VectorXf& meas, const float& r, const float& p, 
+               const vector<float>& q, const float& delta_t){
 
-    initMatrix(meas.size());
+    auto dim = meas.size();
     
+    initMatrix(dim);
+
+    initParams(meas, r, p, q, delta_t);
+
 }
 
 Target::~Target(){

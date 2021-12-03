@@ -46,7 +46,7 @@ private:
 
     MHTParams _params;
 
-    vector<shared_ptr<TrackTree>> _track_tree;
+    vector<shared_ptr<TrackTree>> _track_trees;
 
     static uint SCAN_K;
     

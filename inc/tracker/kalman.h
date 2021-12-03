@@ -5,12 +5,16 @@
 #ifndef MHT_KALMAN_H
 #define MHT_KALMAN_H
 
+#include <vector>
+
 #include <eigen3/Eigen/Eigen>
 
 #include "log/log.h"
+#include "common/motion.h"
 
 namespace mht_tracker {
 
+using std::vector;
 
 class Kalman {
 
@@ -21,7 +25,8 @@ public:
 
     virtual void initMatrix(const int& dim);
     
-    virtual void initParams(const float& r, const float& p, const float& pos_q, const float& velo_q);
+    virtual void initParams(const Eigen::VectorXf& meas, const float& r, const float& p, 
+                            const vector<float>& q, const float& delta_t);
 
     virtual void predict();
 
