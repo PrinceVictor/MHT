@@ -6,20 +6,30 @@
 
 namespace mht_tracker {
 
-TrackTree::TrackTree(){
+uint TrackTree::TRACK_ID = 0;
+
+TrackTree::TrackTree(const uint scan_k):_scan_k(scan_k){
+
 }
 
-TrackTree::TrackTree(shared_ptr<TrackTree>& parent):_parent(parent){
+TrackTree::TrackTree(const uint scan_k, const Eigen::VectorXf meas)
+:_scan_k(scan_k){
+    
 
+}
+
+// TrackTree::TrackTree(shared_ptr<TrackTree>& parent):_parent(parent){
+
+// }
+
+TrackTree::~TrackTree(){
+
+    std::cout<< "delete tree" << std::endl;
 }
 
 void TrackTree::addChild(shared_ptr<TrackTree>& child){
 
 }
 
-TrackTree::~TrackTree(){
-
-    std::cout<< "delete tree" << std::endl;
-}
     
 }

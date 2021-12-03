@@ -16,9 +16,12 @@ class Kalman {
 
 public:
     Kalman();
-    // Kalman(const int dim);
 
     ~Kalman();
+
+    virtual void initMatrix(const int& dim);
+    
+    virtual void initParams(const float& r, const float& p, const float& pos_q, const float& velo_q);
 
     virtual void predict();
 
@@ -29,6 +32,8 @@ public:
     Eigen::MatrixXf residualCovarianceMat();
   
 private:
+
+public:
 
     Eigen::VectorXf _X;
 

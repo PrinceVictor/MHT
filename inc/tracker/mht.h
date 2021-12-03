@@ -12,7 +12,7 @@
 
 #include "log/log.h"
 #include "common/utils.h"
-#include "tracker/mht_param.h"
+#include "tracker/mhtparam.h"
 #include "tracker/tracktree.h"
 
 namespace mht_tracker {
@@ -38,11 +38,17 @@ public:
 
 private:
 
+    static void addScanCount();
+
+public:
+
 private:
 
     MHTParams _params;
 
-    std::shared_ptr<TrackTree> _track_tree;
+    vector<shared_ptr<TrackTree>> _track_tree;
+
+    static uint SCAN_K;
     
 
 };

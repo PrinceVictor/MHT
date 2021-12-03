@@ -10,7 +10,6 @@ using mht_common::Random;
 using mht_measurement::Measurement;
 using mht_tracker::MHT;
 
-
 int main(int argc, char *argv[]){
 
     FLAGS_log_dir = "./log";
@@ -25,15 +24,15 @@ int main(int argc, char *argv[]){
 
     auto measures = measurement->get_measurements();
 
-    MHT_tracker->test();
+    // MHT_tracker->test();
 
-    // for(auto it=measures.begin(); it!=measures.end(); it++){
+    for(auto it=measures.begin(); it!=measures.end(); it++){
 
-    //     auto t_now = it->first;
-    //     auto& meas = it->second;
+        auto t_now = it->first;
+        auto& meas = it->second;
         
-    //     MHT_tracker->run(t_now, meas);
-    // }
+        MHT_tracker->run(t_now, meas);
+    }
 
     google::ShutdownGoogleLogging();
 

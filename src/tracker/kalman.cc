@@ -7,10 +7,28 @@
 namespace mht_tracker {
 
 Kalman::Kalman(){
-
 }
 
 Kalman::~Kalman(){
+}
+
+void Kalman::initMatrix(const int& dim){
+    
+    _X = Eigen::VectorXf::Zero(dim*2);
+    _F = Eigen::MatrixXf::Identity(dim*2, dim*2);
+    _H = Eigen::MatrixXf::Identity(dim, dim*2);
+    _P = Eigen::MatrixXf::Identity(dim*2, dim*2);
+    _Q = Eigen::MatrixXf::Identity(dim*2, dim*2);
+    _R = Eigen::MatrixXf::Identity(dim, dim);
+}
+
+void Kalman::initParams(const float& r, const float& p, const float& pos_q, const float& velo_q){
+
+    _P = _P*p;
+    _R = _R*r;
+    int dim = _R.rows();
+    _Q.topLeftCorner(dim, dim) = _Q.topLeftCorner(dim, dim)*pos_q;
+    _Q.bottomRightCorner(dim, dim) = _Q.bottomRightCorner(dim, dim)*velo_q;
 
 }
 

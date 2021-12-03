@@ -6,6 +6,8 @@
 
 namespace mht_tracker {
 
+uint MHT::SCAN_K = 0;
+
 MHT::MHT(){
 
     LOG_INFO("Construct Multiple Hypothesis Tracker");
@@ -22,26 +24,30 @@ MHT::~MHT(){
 
 void MHT::run(const float& t, const vector<Eigen::VectorXf>& meas){
 
-    LOG_INFO("run MHT! t:{:.1f}s\tmeas size:{}", t, meas.size());
+    LOG_INFO("run MHT! t:{:.1f}s \tmeas size:{}", t, meas.size());
+    int last_track_num = _track_tree.size();
 
     for(int i = 0; i < meas.size(); i++){
         
+        LOG_INFO("meas id:{} \tpos x:{:.2f}, y:{:.2f}", i, meas[i](0), meas[i](1));
+
+        if(last_track_num){
+
+        }
+        _track_tree.emplace_back(std::make_shared<TrackTree>(SCAN_K, meas[i]));
+        
     }
+
+    MHT::addScanCount();
+}
+
+void MHT::addScanCount(){
+
+    ++SCAN_K;
 }
 
 void MHT::test(){
 
-    _track_tree = make_shared<TrackTree>();
-    {
-        auto child1 = make_shared<TrackTree>(_track_tree);
-        _track_tree->_children.push_back(child1);
-        {
-            auto child2 = make_shared<TrackTree>(child1);
-            child1->_children.push_back(child2);
-        }
-    }
-    _track_tree.reset();
-    
 }
 
 

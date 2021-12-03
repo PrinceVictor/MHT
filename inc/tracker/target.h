@@ -16,6 +16,8 @@ class Target: protected Kalman {
 public:
 
     Target();
+
+    Target(const Eigen::VectorXf& meas);
   
     ~Target();
 

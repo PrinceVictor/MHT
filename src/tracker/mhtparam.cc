@@ -2,7 +2,7 @@
 // Created by Hongbin Zhou on 2021/11/30
 // Author: Hongbin Zhou
 
-#include "tracker/mht_param.h"
+#include "tracker/mhtparam.h"
 
 namespace mht_tracker {
 

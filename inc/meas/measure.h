@@ -17,7 +17,7 @@
 #include "log/log.h"
 #include "common/random.h"
 #include "common/motion.h"
-#include "meas/meas_param.h"
+#include "meas/measparam.h"
 
 namespace mht_measurement {
 

@@ -2,7 +2,7 @@
 // Created by Hongbin Zhou on 2021/11/27
 // Author: Hongbin Zhou
 
-#include "meas/meas_param.h"
+#include "meas/measparam.h"
 
 namespace mht_measurement {
 

@@ -7,6 +7,11 @@
 namespace mht_tracker {
 
 Target::Target(){
+}
+
+Target::Target(const Eigen::VectorXf& meas){
+
+    initMatrix(meas.size());
     
 }
 

@@ -21,23 +21,29 @@ class TrackTree{
 
 public:
 
-TrackTree();
+    TrackTree(const uint scan_k);
 
-TrackTree(shared_ptr<TrackTree>& parent);
+    TrackTree(const uint scan_k, const Eigen::VectorXf meas);
 
-void addChild(shared_ptr<TrackTree>& child);
+    // TrackTree(shared_ptr<TrackTree>& parent);
 
-~TrackTree();
+    void addChild(shared_ptr<TrackTree>& child);
+
+    ~TrackTree();
 
 public:
 
-int _depth;
+    const uint _scan_k;
 
-weak_ptr<TrackTree> _parent;
+    weak_ptr<TrackTree> _parent;
 
-vector<shared_ptr<TrackTree>> _children;
+    vector<shared_ptr<TrackTree>> _children;
+
+
 
 private:
+
+    static uint TRACK_ID;
 
 };
     
