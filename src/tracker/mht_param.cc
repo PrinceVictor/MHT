@@ -13,19 +13,19 @@ MHTParams::MHTParams(){
     
     LOG_INFO("INIT THE MHT PARAMETERS");
 
-    init_key_dict(_keys);
+    initKeyDict(_keys);
 }
 
 MHTParams::MHTParams(const string& param_path){
 
     LOG_INFO("INIT THE MHT PARAMETERS");
 
-    init_key_dict(_keys);
+    initKeyDict(_keys);
 
-    load_parameters(param_path);
+    loadParameters(param_path);
 }
 
-void MHTParams::set_params(const string& key, const string& value){
+void MHTParams::setParams(const string& key, const string& value){
 
     if(_param_key_dict.count(key) == 0) return;
     switch(_param_key_dict[key]){

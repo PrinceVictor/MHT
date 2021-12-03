@@ -8,7 +8,6 @@
 #include <random>
 #include <chrono>
 #include <vector>
-#include <iostream>
 
 #include "log/log.h"
 
@@ -21,7 +20,7 @@ public:
     Random();
 
     template<typename T>
-    static void get_uniform_randoms(std::vector<T>& result, float min=0.0, float max=1.0, int num=1){
+    static void getUniformRandoms(std::vector<T>& result, float min=0.0, float max=1.0, int num=1){
     
         if(num < 1) return;
 
@@ -33,7 +32,7 @@ public:
     }
 
     template<typename T>
-    static void get_normal_randoms(std::vector<T>& result, float mean=0, float variance=1, int num=1){
+    static void getNormalRandoms(std::vector<T>& result, float mean=0, float variance=1, int num=1){
         
         if(num < 1) return;
 
@@ -45,7 +44,7 @@ public:
     }
 
     template<typename T>
-    static void get_possion_randoms(std::vector<T>& result, float expect, int num=1){
+    static void getPossionRandoms(std::vector<T>& result, float expect, int num=1){
         
         if(num < 1) return;
 

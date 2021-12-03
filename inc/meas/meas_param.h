@@ -7,7 +7,6 @@
 
 #include "log/log.h"
 #include "common/param.h"
-#include <iostream>
 
 namespace mht_measurement {
 
@@ -21,11 +20,11 @@ public:
 
     MeasParams(const string& param_path);
 
-    int get_sample_num();
+    int getSampleNum();
 
 protected:
 
-    void set_params(const string& key, const string& value);
+    void setParams(const string& key, const string& value);
 
 public:
     //SCENE DIMENSION: default=2 for x,y

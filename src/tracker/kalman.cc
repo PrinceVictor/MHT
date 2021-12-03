@@ -16,19 +16,28 @@ Kalman::~Kalman(){
 
 void Kalman::predict(){
     
-    _X_pre = _state_trans_mat * _X_est;
-    _covarince_P = _state_trans_mat*_covarince_P*_state_trans_mat + _Q;
-
+    _X = _F * _X;
+    _P = _F*_P*_F.transpose() + _Q;
 }
 
 void Kalman::update(const Eigen::VectorXf& meas){
-   
-   auto inv = innovation(meas);
+    
+    auto y_tilde = innovation(meas);
+    auto S = residualCovarianceMat();
+
+    auto K = _P*_H.transpose()*S.inverse();
+    _X = _X + K*y_tilde;
+    _P = _P - K*S*K.transpose();
 }
 
 Eigen::VectorXf Kalman::innovation(const Eigen::VectorXf& meas){
 
-    return meas - _meas_mat*_X_pre;
+    return meas - _H*_X;
+}
+
+Eigen::MatrixXf Kalman::residualCovarianceMat(){
+
+    return _H* _P * _H.transpose() + _R;
 }
 
 }

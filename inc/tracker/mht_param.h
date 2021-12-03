@@ -21,7 +21,7 @@ public:
 
 protected:
 
-    void set_params(const string& key, const string& value);
+    void setParams(const string& key, const string& value);
 
 public:
     //SCENE DIMENSION: default=2 for x,y

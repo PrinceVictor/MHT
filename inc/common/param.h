@@ -5,7 +5,6 @@
 #ifndef MHT_PARAM_H
 #define MHT_PARAM_H
 
-#include <iostream>
 #include <string>
 #include <vector>
 #include <map>
@@ -23,15 +22,15 @@ class Parameters{
 
 public:
 
-    virtual void load_parameters(const string& param_path);
+    virtual void loadParameters(const string& param_path);
 
 protected:
 
-    virtual void init_key_dict(const std::vector<string>& keys);
+    virtual void initKeyDict(const std::vector<string>& keys);
 
-    virtual void load_param_file(const string& param_path);
+    virtual void loadParamFile(const string& param_path);
 
-    virtual void set_params(const string& key, const string& value)=0;
+    virtual void setParams(const string& key, const string& value)=0;
 
 protected:
 

@@ -16,25 +16,25 @@ MeasParams::MeasParams(){
 
     LOG_INFO("INIT THE MEASUREMENT PARAMETERS");
 
-    init_key_dict(_keys);
+    initKeyDict(_keys);
 }
 
 MeasParams::MeasParams(const string& param_path){
 
     LOG_INFO("INIT THE MEASUREMENT PARAMETERS");
 
-    init_key_dict(_keys);
+    initKeyDict(_keys);
 
-    load_parameters(param_path);
+    loadParameters(param_path);
 }
 
 
-int MeasParams::get_sample_num(){
+int MeasParams::getSampleNum(){
 
     return std::floor((_TIME_END-_TIME_START)/_SAMPLE_INTERVAL);
 }
 
-void MeasParams::set_params(const string& key, const string& value){
+void MeasParams::setParams(const string& key, const string& value){
     
     if(_param_key_dict.count(key) == 0) return;
 

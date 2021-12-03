@@ -17,3 +17,4 @@ MEASUREMENT_NOISE=3
 
 // Parameters For Multiple Hypothesis Tracking
 P_DETECTION=0.9
+N_SCAN=2

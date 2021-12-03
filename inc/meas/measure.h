@@ -5,7 +5,6 @@
 #ifndef MHT_MEAS_H
 #define MHT_MEAS_H
 
-#include <iostream>
 #include <fstream>
 #include <map>
 #include <string>
@@ -40,17 +39,15 @@ public:
 
     ~Measurement();
 
-    void generate_measures();
+    void generateMeasures();
 
     const std::map<float, vector<Eigen::VectorXf>>& get_measurements();
 
 private:
 
-    void generate_noises();
+    void generateNoises();
 
-    void generate_targets();
-
-    std::map<string, string> load_param_file(const string& param_path);
+    void generateTarget();
 
 private:
 

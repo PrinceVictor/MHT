@@ -11,7 +11,7 @@
 
 namespace mht_common {
 
-std::vector<std::string> str_split(const std::string&, const std::string&);
+std::vector<std::string> strSplit(const std::string&, const std::string&);
 
 
 }

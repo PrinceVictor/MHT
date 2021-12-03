@@ -3,6 +3,7 @@
 
 #include <fmt/format.h>
 #include <glog/logging.h>
+#include <iostream>
 
 #define FORMAT_STRING fmt::format
 #define LOG_FUNCTION LOG(INFO) << __FUNCTION__ << " | "

@@ -6,7 +6,7 @@
 
 namespace mht_common {
 
-std::vector<std::string> str_split(const std::string& input_str,  const std::string& match_str=" "){
+std::vector<std::string> strSplit(const std::string& input_str,  const std::string& match_str=" "){
     std::vector<std::string> result;
     std::string::size_type left=0, right=0;
     right = input_str.find(match_str, left);

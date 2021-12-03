@@ -20,23 +20,21 @@ public:
 
     ~Kalman();
 
-    void predict();
+    virtual void predict();
 
-    void update(const Eigen::VectorXf& meas);
+    virtual void update(const Eigen::VectorXf& meas);
 
     Eigen::VectorXf innovation(const Eigen::VectorXf& meas);
+
+    Eigen::MatrixXf residualCovarianceMat();
   
 private:
 
-    Eigen::VectorXf _X_est, _X_pre;
+    Eigen::VectorXf _X;
 
-    Eigen::MatrixXf _Q, _R, _covarince_P;
+    Eigen::MatrixXf _Q, _R, _P;
 
-    Eigen::MatrixXf _state_trans_mat, _meas_mat;
-
-    float _K;
-
-
+    Eigen::MatrixXf _F, _H;
 
 };
 

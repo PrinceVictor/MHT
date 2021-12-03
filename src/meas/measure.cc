@@ -13,7 +13,7 @@ Measurement::Measurement(const string& param_path):_params(param_path){
     
     LOG_INFO("Construct Measurement Space");
 
-    generate_measures();
+    generateMeasures();
 }
 
 const std::map<float, vector<Eigen::VectorXf>>& Measurement::get_measurements(){
@@ -21,13 +21,13 @@ const std::map<float, vector<Eigen::VectorXf>>& Measurement::get_measurements(){
     return _measures;
 }
 
-void Measurement::generate_measures(){
+void Measurement::generateMeasures(){
 
     _targets.clear(); _noises.clear();
     seq_data measures;
 
-    generate_noises();
-    generate_targets();
+    generateNoises();
+    generateTarget();
         
     if(_targets.size() != _noises.size()){
         throw "The Length of Target is not equal with Noise!";
@@ -41,7 +41,7 @@ void Measurement::generate_measures(){
     float delta_t = _params._SAMPLE_INTERVAL;
 
     vector<float> add_noises(add_noise_num);
-    Random::get_normal_randoms(add_noises, 0, noise_std, add_noise_num*scene_dim);
+    Random::getNormalRandoms(add_noises, 0, noise_std, add_noise_num*scene_dim);
     
     int start_idx=0;
     measures.resize(seq_len);
@@ -63,20 +63,20 @@ void Measurement::generate_measures(){
     }
 }
 
-void Measurement::generate_noises(){
+void Measurement::generateNoises(){
 
     int expect_nosie = _params._EXPECT_NOISE;
-    int sample_num = _params.get_sample_num();
+    int sample_num = _params.getSampleNum();
     int scene_dim = _params._SCENE_DIMENSION;
     float scene_range = _params._SCENE_RANGE;
 
     vector<int> noise_nums;
-    Random::get_possion_randoms(noise_nums, expect_nosie, sample_num);
+    Random::getPossionRandoms(noise_nums, expect_nosie, sample_num);
 
     auto total_noise = accumulate(noise_nums.begin(), noise_nums.end(), 0);
 
     vector<float> noise_pos_list;
-    Random::get_uniform_randoms(noise_pos_list, 0, scene_range, total_noise*scene_dim);
+    Random::getUniformRandoms(noise_pos_list, 0, scene_range, total_noise*scene_dim);
 
     int start_idx=0;
     _noises.resize(sample_num);
@@ -94,9 +94,9 @@ void Measurement::generate_noises(){
     }
 }
 
-void Measurement::generate_targets(){
+void Measurement::generateTarget(){
 
-    int sample_num = _params.get_sample_num();
+    int sample_num = _params.getSampleNum();
     float delta_t = _params._SAMPLE_INTERVAL;
     int scene_dim = _params._SCENE_DIMENSION;
     float scene_range = _params._SCENE_RANGE;
@@ -105,8 +105,8 @@ void Measurement::generate_targets(){
     float target_speed_range = _params._INIT_SPEED_RANGE;
 
     vector<float> init_target_pos, init_target_veloc;
-    Random::get_uniform_randoms(init_target_pos, 0, scene_range, target_num*scene_dim);
-    Random::get_uniform_randoms(init_target_veloc, 0, target_speed_range, target_num*scene_dim);
+    Random::getUniformRandoms(init_target_pos, 0, scene_range, target_num*scene_dim);
+    Random::getUniformRandoms(init_target_veloc, 0, target_speed_range, target_num*scene_dim);
 
     _targets.assign(sample_num, vector<Eigen::VectorXf>(target_num, Eigen::VectorXf(scene_dim*2)));
     auto motion_trans_mat = mht_common::Motion::CV(scene_dim, delta_t);

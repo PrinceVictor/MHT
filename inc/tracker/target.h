@@ -6,17 +6,20 @@
 #define MHT_TARGET_H
 
 #include "log/log.h"
+#include "tracker/kalman.h"
 
 namespace mht_tracker {
 
 
-class Target {
+class Target: protected Kalman {
 
 public:
 
     Target();
   
     ~Target();
+
+    float likeLihood();
 
 private:
 

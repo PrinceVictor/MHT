@@ -14,4 +14,9 @@ Target::~Target(){
 
 }
 
+float Target::likeLihood(){
+
+    
+}
+
 }

@@ -25,9 +25,15 @@ int main(int argc, char *argv[]){
 
     auto measures = measurement->get_measurements();
 
-    for(auto it=measures.begin(); it!=measures.end(); it++){
-        std::cout<< it->first <<'\t' << it->second.size() <<std::endl;
-    }
+    MHT_tracker->test();
+
+    // for(auto it=measures.begin(); it!=measures.end(); it++){
+
+    //     auto t_now = it->first;
+    //     auto& meas = it->second;
+        
+    //     MHT_tracker->run(t_now, meas);
+    // }
 
     google::ShutdownGoogleLogging();
 
