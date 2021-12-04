@@ -11,17 +11,30 @@ uint TrackTree::TRACK_ID_COUNT = 0;
 TrackTree::TrackTree(){
 }
 
-TrackTree::TrackTree(const int flag, const uint scan_k, const uint detection_id, Eigen::VectorXf meas, 
-                     const float& r, const float& p, const vector<float>& q, const float& delta_t){
+TrackTree::TrackTree(const int flag, const uint scan_k, const uint detection_id, 
+                     Eigen::VectorXf meas, const MHTParams& params){
     _scan_k = scan_k;
     _detection_id = detection_id;
 
+    auto delta_t = params._DELTA_T, r = params._MEAS_VAR, p = params._STATE_VAR;
+    auto p_d = params._P_DETECTION, _d_gate=params._TRACK_GATE_THRES; 
+    auto track_score_conf_thre=params._TRACK_SCORE_CONF_THRES, track_score_del_thres= params._TRACK_SCORE_DEL_THRES;
+    auto p_fa = params._CLUTTER_DENSITY, p_n=params._NEW_TARGET_DENSITY;
+    auto q = {params._POSITION_VAR, params._VELOCITY_VAR};
+
     if(flag == NEW_TRACK){
+        
         _track_id = TrackTree::TRACK_ID_COUNT;
         _track_history.emplace_back(_detection_id);
         _target = make_shared<Target>(meas, r, p, q, delta_t);
+
+
         TrackTree::trackCount();
     }
+
+}
+
+void initParams(const MHTParams& params){
 
 }
 

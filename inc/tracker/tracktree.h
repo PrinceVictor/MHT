@@ -10,6 +10,7 @@
 
 #include "log/log.h"
 #include "tracker/target.h"
+#include "tracker/mhtparam.h"
 
 namespace mht_tracker {
 
@@ -33,11 +34,13 @@ public:
 
     TrackTree();
 
-    TrackTree(const int flag, uint scan_k, uint detection_id, const Eigen::VectorXf meas, 
-              const float& r, const float& p, const vector<float>& q, const float& delta_t);
+    TrackTree(const int flag, uint scan_k, uint detection_id, 
+              const Eigen::VectorXf meas, const MHTParams& params);
 
     // TrackTree(shared_ptr<TrackTree>& parent);
     ~TrackTree();
+
+    void initParams(const MHTParams& params);
 
     void predict();
 
@@ -55,6 +58,8 @@ public:
 
     uint _scan_k, _detection_id;
 
+    uint _track_id;
+
     vector<uint> _track_history;
 
     weak_ptr<TrackTree> _parent;
@@ -62,8 +67,6 @@ public:
     vector<MyTrack> _children;
 
     MyTarget _target;
-
-    uint _track_id;
 
 private:
 
