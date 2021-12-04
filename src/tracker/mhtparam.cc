@@ -8,7 +8,8 @@ namespace mht_tracker {
 
 const std::vector<string> MHTParams::_keys = 
     {"SCENE_DIMENSION", "N_SCAN", "P_DETECTION", "SAMPLE_INTERVAL", "POSITION_ERROR",
-     "VELOCITY_ERROR", "MEASUREMENT_NOISE", "STATE_ERROR"};
+     "VELOCITY_ERROR", "MEASUREMENT_NOISE", "STATE_ERROR", "EXPECT_NOISE",
+     "TARGET_DENSITY", "TRACK_GATE_THRES", "TRACK_SCORE_DEL_THRES", "TRACK_SCORE_CONF_THRES"};
 
 MHTParams::MHTParams(){
     
@@ -37,7 +38,12 @@ void MHTParams::setParams(const string& key, const string& value){
         case 4: {float p_error=std::stof(value); _POSITION_VAR=p_error*p_error; break;}
         case 5: {float v_error=std::stof(value); _VELOCITY_VAR=v_error*v_error; break;}
         case 6: {float z_error=std::stof(value); _MEAS_VAR=z_error*z_error; break;}
-        case 7: {float x_error=std::stof(value); _STATE_VAR=x_error*x_error; break;}    
+        case 7: {float x_error=std::stof(value); _STATE_VAR=x_error*x_error; break;}
+        case 8: _CLUTTER_DENSITY=std::stof(value); break;
+        case 9: _NEW_TARGET_DENSITY=std::stof(value); break;
+        case 10: _TRACK_GATE_THRES=std::stof(value); break;
+        case 11: _TRACK_SCORE_DEL_THRES=std::stof(value); break;
+        case 12: _TRACK_SCORE_CONF_THRES=std::stof(value); break;
     }
 }
 

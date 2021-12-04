@@ -10,9 +10,7 @@
 
 namespace mht_tracker {
 
-
-
-class Target: protected Kalman {
+class Target: public Kalman {
 
 public:
 

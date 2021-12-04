@@ -8,17 +8,17 @@ namespace mht_tracker {
 
 uint TrackTree::TRACK_ID_COUNT = 0;
 
-TrackTree::TrackTree(const uint scan_k):_scan_k(scan_k){
-
+TrackTree::TrackTree(){
 }
 
-TrackTree::TrackTree(const int flag, const uint scan_k, const Eigen::VectorXf meas, const float& r, const float& p, 
-                     const vector<float>& q, const float& delta_t)
-:_scan_k(scan_k){
-    
+TrackTree::TrackTree(const int flag, const uint scan_k, const uint detection_id, Eigen::VectorXf meas, 
+                     const float& r, const float& p, const vector<float>& q, const float& delta_t){
+    _scan_k = scan_k;
+    _detection_id = detection_id;
+
     if(flag == NEW_TRACK){
         _track_id = TrackTree::TRACK_ID_COUNT;
-
+        _track_history.emplace_back(_detection_id);
         _target = make_shared<Target>(meas, r, p, q, delta_t);
         TrackTree::trackCount();
     }
@@ -34,14 +34,36 @@ TrackTree::~TrackTree(){
     std::cout<< "delete tree" << std::endl;
 }
 
-void TrackTree::trackCount(){
-    
-    TrackTree::TRACK_ID_COUNT++;
+void TrackTree::predict(){
+
+    _target->predict();
+
+}
+
+void TrackTree::update(const Eigen::VectorXf& meas){
+
+    _target->update(meas);
 }
 
 void TrackTree::addChild(shared_ptr<TrackTree>& child){
 
 }
 
+void TrackTree::trackCount(){
+    
+    TrackTree::TRACK_ID_COUNT++;
+}
+
+void TrackTree::getLeaves(MyTrack& root, vector<MyTrack>& result, const int& dim){
+    if(root->_scan_k == dim){
+        result.push_back(root);
+        return;
+    }
+    
+    for(int i=0; i<root->_children.size(); i++){
+        getLeaves(root->_children[i], result, dim);
+    }
+
+}
     
 }

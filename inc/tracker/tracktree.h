@@ -13,29 +13,39 @@
 
 namespace mht_tracker {
 
-#define NEW_TRACK 0
-#define ASSCIATED_TRACK 1
-#define MISS_DETECTION 2
+#define MISS_DETECTION 0
+#define NEW_TRACK 1
+#define ASSCIATED_TRACK 2
 
 using std::vector;
 using std::shared_ptr;
 using std::weak_ptr;
 using std::make_shared;
 
+class TrackTree;
+
+typedef shared_ptr<Target> MyTarget;
+typedef shared_ptr<TrackTree> MyTrack;
+
 class TrackTree{
 
 public:
 
-    TrackTree(const uint scan_k);
+    TrackTree();
 
-    TrackTree(const int flag, const uint scan_k, const Eigen::VectorXf meas, const float& r, const float& p, 
-              const vector<float>& q, const float& delta_t);
+    TrackTree(const int flag, uint scan_k, uint detection_id, const Eigen::VectorXf meas, 
+              const float& r, const float& p, const vector<float>& q, const float& delta_t);
 
     // TrackTree(shared_ptr<TrackTree>& parent);
+    ~TrackTree();
+
+    void predict();
+
+    void update(const Eigen::VectorXf& meas);
 
     void addChild(shared_ptr<TrackTree>& child);
 
-    ~TrackTree();
+    static void getLeaves(MyTrack& root, vector<MyTrack>& result, const int& dim);
 
 private:
 
@@ -43,13 +53,15 @@ private:
 
 public:
 
-    const uint _scan_k;
+    uint _scan_k, _detection_id;
+
+    vector<uint> _track_history;
 
     weak_ptr<TrackTree> _parent;
 
-    vector<shared_ptr<TrackTree>> _leaves;
+    vector<MyTrack> _children;
 
-    shared_ptr<Target> _target;
+    MyTarget _target;
 
     uint _track_id;
 
