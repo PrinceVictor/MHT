@@ -50,6 +50,8 @@ public:
     float _TRACK_SCORE_DEL_THRES=0.05;
     //TRACK SCORE CONFIRM THRESHOLD
     float _TRACK_SCORE_CONF_THRES=0.25;
+    //SCENE VOLUME
+    float _SCENE_VOLUME=100;
 
 
 

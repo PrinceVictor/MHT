@@ -37,6 +37,9 @@ public:
     TrackTree(const int flag, uint scan_k, uint detection_id, 
               const Eigen::VectorXf meas, const MHTParams& params);
 
+    TrackTree(const int flag, MyTrack& parent, const int& detect_id,
+              const Eigen::VectorXf& meas=Eigen::VectorXf::Zero(0));
+
     // TrackTree(shared_ptr<TrackTree>& parent);
     ~TrackTree();
 
@@ -44,7 +47,9 @@ public:
 
     void predict();
 
-    void update(const Eigen::VectorXf& meas);
+    void update(const int flag, MyTrack& parent, const int& detect_id=0, const Eigen::VectorXf& meas=Eigen::VectorXf::Zero(0));
+
+    void inherit(const int flag);
 
     void addChild(shared_ptr<TrackTree>& child);
 
@@ -67,6 +72,8 @@ public:
     vector<MyTrack> _children;
 
     MyTarget _target;
+
+    
 
 private:
 

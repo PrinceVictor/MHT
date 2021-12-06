@@ -3,12 +3,12 @@
 
 #include "log/log.h"
 #include "meas/measure.h"
-#include "common/random.h"
 #include "tracker/mht.h"
 
 using mht_common::Random;
 using mht_measurement::Measurement;
 using mht_tracker::MHT;
+
 
 int main(int argc, char *argv[]){
 

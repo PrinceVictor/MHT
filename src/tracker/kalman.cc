@@ -23,7 +23,7 @@ void Kalman::initMatrix(const int& dim){
 }
 
 void Kalman::initParams(const Eigen::VectorXf& meas, const float& r, const float& p, 
-                        const vector<float>& q, const float& delta_t){
+                        const float& d_gate, const vector<float>& q, const float& delta_t){
 
     int dim = _R.rows();
 
@@ -38,32 +38,53 @@ void Kalman::initParams(const Eigen::VectorXf& meas, const float& r, const float
     for(int i = 0; i < q.size(); i++){
         _Q.block(i, i, dim, dim) = _Q.block(i, i, dim, dim)*q[i];
     }
+
+    _d_gate = d_gate;
 }
 
 void Kalman::predict(){
     
-    _X = _F * _X;
+    _X_pre = _F * _X;
     _P = _F*_P*_F.transpose() + _Q;
 }
 
-void Kalman::update(const Eigen::VectorXf& meas){
+bool Kalman::update(const Eigen::VectorXf& meas){
     
     auto y_tilde = innovation(meas);
     auto S = residualCovarianceMat();
+    auto inv_S = S.inverse();
+    auto _deta_s = S.determinant();
 
-    auto K = _P*_H.transpose()*S.inverse();
-    _X = _X + K*y_tilde;
-    _P = _P - K*S*K.transpose();
+    _d2 = y_tilde.transpose()*inv_S*y_tilde;
+
+    if(_d2 <= _d_gate){
+    
+        auto K = _P*_H.transpose()*inv_S;
+        _X = _X_pre + K*y_tilde;
+        _P = _P - K*S*K.transpose();
+
+        return true;
+    }
+
+    return false;
 }
 
 Eigen::VectorXf Kalman::innovation(const Eigen::VectorXf& meas){
 
-    return meas - _H*_X;
+    return meas - _H*_X_pre;
 }
 
 Eigen::MatrixXf Kalman::residualCovarianceMat(){
 
     return _H* _P * _H.transpose() + _R;
+}
+
+float Kalman::getMahDis2(){
+    return _d2;
+}
+
+float Kalman::getDeterminS(){
+    return _det_S;
 }
 
 }

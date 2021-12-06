@@ -9,7 +9,8 @@ namespace mht_tracker {
 const std::vector<string> MHTParams::_keys = 
     {"SCENE_DIMENSION", "N_SCAN", "P_DETECTION", "SAMPLE_INTERVAL", "POSITION_ERROR",
      "VELOCITY_ERROR", "MEASUREMENT_NOISE", "STATE_ERROR", "EXPECT_NOISE",
-     "TARGET_DENSITY", "TRACK_GATE_THRES", "TRACK_SCORE_DEL_THRES", "TRACK_SCORE_CONF_THRES"};
+     "TARGET_DENSITY", "TRACK_GATE_THRES", "TRACK_SCORE_DEL_THRES", "TRACK_SCORE_CONF_THRES",
+     "SCENE_RANGE"};
 
 MHTParams::MHTParams(){
     
@@ -44,6 +45,7 @@ void MHTParams::setParams(const string& key, const string& value){
         case 10: _TRACK_GATE_THRES=std::stof(value); break;
         case 11: _TRACK_SCORE_DEL_THRES=std::stof(value); break;
         case 12: _TRACK_SCORE_CONF_THRES=std::stof(value); break;
+        case 13: {float length=std::stof(value); _SCENE_VOLUME=length*length; break;}
     }
 }
 

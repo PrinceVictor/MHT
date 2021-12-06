@@ -26,11 +26,15 @@ public:
     virtual void initMatrix(const int& dim);
     
     virtual void initParams(const Eigen::VectorXf& meas, const float& r, const float& p, 
-                            const vector<float>& q, const float& delta_t);
+                            const float& d_gate, const vector<float>& q, const float& delta_t);
 
     virtual void predict();
 
-    virtual void update(const Eigen::VectorXf& meas);
+    virtual bool update(const Eigen::VectorXf& meas);
+
+    virtual float getMahDis2();
+
+    virtual float getDeterminS();
 
     Eigen::VectorXf innovation(const Eigen::VectorXf& meas);
 
@@ -40,12 +44,13 @@ private:
 
 public:
 
-    Eigen::VectorXf _X;
+    Eigen::VectorXf _X, _X_pre;
 
     Eigen::MatrixXf _Q, _R, _P;
 
     Eigen::MatrixXf _F, _H;
 
+    float _d_gate, _d2, _det_S;
 };
 
 }

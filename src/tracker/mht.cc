@@ -30,11 +30,18 @@ void MHT::run(const float& t, const vector<Eigen::VectorXf>& meas){
     for(int i = 0; i < _track_trees.size(); i++){
         TrackTree::getLeaves(_track_trees[i], leaves, MHT::SCAN_K-1);
     }
-    for(int i = 0; i < leaves.size(); i++){
+
+    int last_tracks_num = leaves.size();
+    LOG_INFO("last_tracks_num {}", last_tracks_num);
+
+    for(int i = 0; i < last_tracks_num; i++){
         leaves[i]->predict();
     }
 
-    int last_tracks_num = leaves.size();
+    for(int i = 0; i < last_tracks_num; i++){
+        leaves[i]->update(MISS_DETECTION, leaves[i]);
+    }
+    
 
     for(int i = 0; i < meas.size(); i++){
         
@@ -42,17 +49,11 @@ void MHT::run(const float& t, const vector<Eigen::VectorXf>& meas){
 
         if(last_tracks_num){
             for(int j = 0; j < last_tracks_num; j++){
-                leaves[i]->update(meas[i]);
+                leaves[i]->update(ASSCIATED_TRACK, leaves[i], i+1, meas[i]);
             }
         }
         
-        
-        // _track_trees.emplace_back(std::make_shared<TrackTree>(NEW_TRACK, i+1, SCAN_K,
-        //                                                       p_d, p_fa, p_n, _d_gate,
-        //                                                       _track_score_conf_thre, _track_score_conf_thre,
-        //                                                       meas[i], r, p, q, delta_t));
-
-        
+        _track_trees.emplace_back(make_shared<TrackTree>(NEW_TRACK, SCAN_K, i+1, meas[i], _params));
     }
 
     MHT::addScanCount();

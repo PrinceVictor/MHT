@@ -17,21 +17,44 @@ TrackTree::TrackTree(const int flag, const uint scan_k, const uint detection_id,
     _detection_id = detection_id;
 
     auto delta_t = params._DELTA_T, r = params._MEAS_VAR, p = params._STATE_VAR;
-    auto p_d = params._P_DETECTION, _d_gate=params._TRACK_GATE_THRES; 
+    auto p_d = params._P_DETECTION, d_gate=params._TRACK_GATE_THRES; 
     auto track_score_conf_thre=params._TRACK_SCORE_CONF_THRES, track_score_del_thres= params._TRACK_SCORE_DEL_THRES;
-    auto p_fa = params._CLUTTER_DENSITY, p_n=params._NEW_TARGET_DENSITY;
+    auto p_fa = params._CLUTTER_DENSITY/params._SCENE_VOLUME, p_n=params._NEW_TARGET_DENSITY;
+    auto volume = params._SCENE_VOLUME;
     auto q = {params._POSITION_VAR, params._VELOCITY_VAR};
 
     if(flag == NEW_TRACK){
         
         _track_id = TrackTree::TRACK_ID_COUNT;
         _track_history.emplace_back(_detection_id);
-        _target = make_shared<Target>(meas, r, p, q, delta_t);
+        _target = make_shared<Target>(meas, r, p, d_gate, q, delta_t);
+        _target->initTrackScore(p_d, track_score_del_thres, track_score_conf_thre, 
+                                p_fa, p_n, volume);
 
 
         TrackTree::trackCount();
     }
+}
 
+TrackTree::TrackTree(const int flag, MyTrack& parent, const int& detect_id, const Eigen::VectorXf& meas){
+    
+    _parent = parent;
+    _target = parent->_target;
+    _track_history = parent->_track_history;
+    _track_id = parent->_track_id;
+    _scan_k = parent->_scan_k+1;
+    _detection_id = detect_id;
+    _track_history.emplace_back(_detection_id);
+    _children.clear();
+
+    if(flag==MISS_DETECTION){
+        
+        _target->missDetection();
+    }
+    else if(flag==ASSCIATED_TRACK){
+
+        _target->updateLLR(meas);
+    }
 }
 
 void initParams(const MHTParams& params){
@@ -53,9 +76,10 @@ void TrackTree::predict(){
 
 }
 
-void TrackTree::update(const Eigen::VectorXf& meas){
+void TrackTree::update(const int flag, MyTrack& parent, const int& detect_id, const Eigen::VectorXf& meas){
 
-    _target->update(meas);
+    _children.emplace_back(make_shared<TrackTree>(flag, parent, detect_id, meas));
+
 }
 
 void TrackTree::addChild(shared_ptr<TrackTree>& child){
@@ -68,8 +92,9 @@ void TrackTree::trackCount(){
 }
 
 void TrackTree::getLeaves(MyTrack& root, vector<MyTrack>& result, const int& dim){
+
     if(root->_scan_k == dim){
-        result.push_back(root);
+        result.emplace_back(root);
         return;
     }
     
