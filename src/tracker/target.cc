@@ -47,14 +47,22 @@ void Target::predictLLR(){
 
 void Target::updateLLR(const Eigen::VectorXf& meas){
 
-    // if(update(meas)){
-    //     float delat_LLR = _log_p_d - _log_beta_fa - meas.size()*0.5*log(2*PI) - \
-    //                       0.5 * getMahDis2() - 0.5 * log(getDeterminS()) ;
-    //     _track_score += delat_LLR;
-    // }
-    // else{
-    //     _track_score = INT_MIN;
-    // }   
+    if(update(meas)){
+        float delat_LLR = _log_p_d - _log_beta_fa - meas.size()*0.5*log(2*PI) - \
+                          0.5 * getMahDis2() - 0.5 * log(getDeterminS()) ;
+        _track_score += delat_LLR;
+
+        #ifdef USE_DEBUG
+            LOG_INFO("In Gate!");
+        #endif
+    }
+    else{
+        _track_score = INT_MIN;
+        
+        #ifdef USE_DEBUG
+            LOG_INFO("Out Gate!");
+        #endif
+    }   
 }
 
 void Target::missDetection(){

@@ -90,6 +90,9 @@ void Measurement::generateNoises(){
                 temp_noise_pos(k) = noise_pos_list[start_idx++];
 
             _noises[i][j] = temp_noise_pos;
+            #ifdef USE_DEBUG
+                LOG_INFO("Noise id:{} time:{} x:{:.3f} y{:.3f}", j, i,  _noises[i][j](0),  _noises[i][j](1));
+            #endif
         }
     }
 }
@@ -115,13 +118,16 @@ void Measurement::generateTarget(){
         for(int j=0; j<sample_num; j++){
             if(j == 0){
                 for(int k=0; k<scene_dim; k++){
-                    _targets[j][i](k) = init_target_pos[k];
-                    _targets[j][i](k+scene_dim) = init_target_veloc[k];
+                    _targets[j][i](k) = init_target_pos[k+i*scene_dim];
+                    _targets[j][i](k+scene_dim) = init_target_veloc[k+i*scene_dim];
                 }
             }
             else{
                 _targets[j][i] = motion_trans_mat*_targets[j-1][i];
             }
+            #ifdef USE_DEBUG
+                LOG_INFO("Target id:{} time:{} x:{:.3f} y{:.3f}", i, j,  _targets[j][i](0),  _targets[j][i](1));
+            #endif
         }
     }
 }

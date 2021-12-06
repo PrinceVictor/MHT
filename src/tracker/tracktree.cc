@@ -52,7 +52,10 @@ TrackTree::TrackTree(const int flag, MyTrack& parent, const int& detect_id, cons
         _target->missDetection();
     }
     else if(flag==ASSCIATED_TRACK){
-
+        
+        #ifdef USE_DEBUG
+            LOG_INFO("Track Tree id:{} Parent:{} Current:{}", _track_id, parent->_detection_id, detect_id);
+        #endif
         _target->updateLLR(meas);
     }
 }
@@ -74,6 +77,9 @@ void TrackTree::predict(){
 
     _target->predict();
 
+    #ifdef USE_DEBUG
+        LOG_INFO("Track id {} X_state x:{:.3f} y{:.3f}", _track_id, _target->_X_pre(0), _target->_X_pre(1));
+    #endif
 }
 
 void TrackTree::update(const int flag, MyTrack& parent, const int& detect_id, const Eigen::VectorXf& meas){

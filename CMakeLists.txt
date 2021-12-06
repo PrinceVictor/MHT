@@ -87,7 +87,7 @@ endif()
 #    message(STATUS "PROTOBUF FOUND")
 #endif()
 
-OPTION(USE_DEBUG off)
+OPTION(USE_DEBUG on)
 if(USE_DEBUG)
     message(STATUS "USE DEBUG")
     add_definitions("-DUSE_DEBUG")

@@ -28,7 +28,7 @@ void Kalman::initParams(const Eigen::VectorXf& meas, const float& r, const float
     int dim = _R.rows();
 
     for(int i = 0; i < dim; i++){
-        _X(i*dim) = meas(i);
+        _X(i) = meas(i);
         _F(i, i+dim) = delta_t;
     }
     
@@ -57,12 +57,16 @@ bool Kalman::update(const Eigen::VectorXf& meas){
 
     _d2 = y_tilde.transpose()*inv_S*y_tilde;
 
+    #ifdef USE_DEBUG
+        LOG_INFO("D2 {:.3f}", _d2);
+    #endif
+
     if(_d2 <= _d_gate){
     
-        auto K = _P*_H.transpose()*inv_S;
+        Eigen::MatrixXf K = _P*_H.transpose()*inv_S;
         _X = _X_pre + K*y_tilde;
         _P = _P - K*S*K.transpose();
-
+ 
         return true;
     }
 

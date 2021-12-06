@@ -49,8 +49,11 @@ void MHT::run(const float& t, const vector<Eigen::VectorXf>& meas){
 
         if(last_tracks_num){
             for(int j = 0; j < last_tracks_num; j++){
-                leaves[i]->update(ASSCIATED_TRACK, leaves[i], i+1, meas[i]);
+                leaves[j]->update(ASSCIATED_TRACK, leaves[j], i+1, meas[i]);
             }
+        #ifdef USE_DEBUG
+            printf("\n\n");
+        #endif
         }
         
         _track_trees.emplace_back(make_shared<TrackTree>(NEW_TRACK, SCAN_K, i+1, meas[i], _params));
