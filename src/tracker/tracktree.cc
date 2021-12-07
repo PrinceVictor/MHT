@@ -6,7 +6,7 @@
 
 namespace mht_tracker {
 
-uint TrackTree::TRACK_ID_COUNT = 0;
+uint TrackTree::TRACK_ID_COUNT = 1;
 
 TrackTree::TrackTree(){
 }
@@ -26,7 +26,8 @@ TrackTree::TrackTree(const int flag, const uint scan_k, const uint detection_id,
     if(flag == NEW_TRACK){
         
         _track_id = TrackTree::TRACK_ID_COUNT;
-        _track_history.emplace_back(_detection_id);
+        _track_history.resize(_scan_k, 0);
+        _track_history.back() = _detection_id;
         _target = make_shared<Target>(meas, r, p, d_gate, q, delta_t);
         _target->initTrackScore(p_d, track_score_del_thres, track_score_conf_thre, 
                                 p_fa, p_n, volume);
@@ -97,7 +98,7 @@ void TrackTree::trackCount(){
     TrackTree::TRACK_ID_COUNT++;
 }
 
-void TrackTree::getLeaves(MyTrack& root, vector<MyTrack>& result, const int& dim){
+void TrackTree::getLeaves(const MyTrack& root, vector<MyTrack>& result, const int& dim){
 
     if(root->_scan_k == dim){
         result.emplace_back(root);
@@ -107,7 +108,33 @@ void TrackTree::getLeaves(MyTrack& root, vector<MyTrack>& result, const int& dim
     for(int i=0; i<root->_children.size(); i++){
         getLeaves(root->_children[i], result, dim);
     }
+}
 
+void TrackTree::getConflictHypos(const vector<MyTrack>& hypos, vector<vector<int>>& conflict_ids, const int& N_scan){
+
+    LOG_INFO("Get Conflict Hypothesis IDs!");
+
+    int hypos_size = hypos.size();
+    for(int i=0; i<hypos_size-1; i++){
+        for(int j=1; i<hypos_size; j++){
+            if(hypos[i]->_track_id == hypos[i]->_track_id){
+                conflict_ids.emplace_back(vector<int>{i, j});
+            }
+            else{
+                auto& left = hypos[i]->_track_history;
+                auto& right = hypos[j]->_track_history;
+                
+                int k = std::max((int)(left.size()-N_scan), 0);
+                for(; k<left.size(); k++){
+                    if(left[k] == right[k]){
+                        conflict_ids.emplace_back(vector<int>{i, j});
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    
 }
     
 }

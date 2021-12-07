@@ -27,7 +27,7 @@ public:
     //SCENE DIMENSION: default=2 for x,y
     int _SCENE_DIMENSION=2;
     //PRUN SCAN
-    int N_SCAN=2;
+    int _N_SCAN=2;
     //PROBABILITY of DETECTION
     float _P_DETECTION=0.9;
     //TIME INTERVAL

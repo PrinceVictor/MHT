@@ -48,7 +48,7 @@ private:
 
     vector<MyTrack> _track_trees;
 
-    static uint SCAN_K;
+    static int SCAN_K;
     
 
 };

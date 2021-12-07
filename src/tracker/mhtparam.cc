@@ -33,7 +33,7 @@ void MHTParams::setParams(const string& key, const string& value){
     if(_param_key_dict.count(key) == 0) return;
     switch(_param_key_dict[key]){
         case 0: _SCENE_DIMENSION=std::stoi(value);break;
-        case 1: N_SCAN=std::stoi(value);break;
+        case 1: _N_SCAN=std::stoi(value);break;
         case 2: _P_DETECTION=std::stof(value);break;
         case 3: _DELTA_T=std::stof(value);break;
         case 4: {float p_error=std::stof(value); _POSITION_VAR=p_error*p_error; break;}

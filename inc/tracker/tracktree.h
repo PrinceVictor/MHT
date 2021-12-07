@@ -53,7 +53,9 @@ public:
 
     void addChild(shared_ptr<TrackTree>& child);
 
-    static void getLeaves(MyTrack& root, vector<MyTrack>& result, const int& dim);
+    static void getLeaves(const MyTrack& root, vector<MyTrack>& result, const int& dim);
+
+    static void getConflictHypos(const vector<MyTrack>& hypos, vector<vector<int>>& conflict_ids, const int& N_scan);
 
 private:
 
@@ -61,9 +63,9 @@ private:
 
 public:
 
-    uint _scan_k, _detection_id;
+    int _scan_k, _detection_id;
 
-    uint _track_id;
+    int _track_id;
 
     vector<uint> _track_history;
 
