@@ -116,8 +116,8 @@ void TrackTree::getConflictHypos(const vector<MyTrack>& hypos, vector<vector<int
 
     int hypos_size = hypos.size();
     for(int i=0; i<hypos_size-1; i++){
-        for(int j=1; i<hypos_size; j++){
-            if(hypos[i]->_track_id == hypos[i]->_track_id){
+        for(int j=1; j<hypos_size; j++){
+            if(hypos[i]->_track_id == hypos[j]->_track_id){
                 conflict_ids.emplace_back(vector<int>{i, j});
             }
             else{

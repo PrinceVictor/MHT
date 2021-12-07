@@ -108,6 +108,9 @@ AUX_SOURCE_DIRECTORY(src/meas/ meas_SRC)
 add_library(meas_share SHARED ${meas_SRC})
 # target_link_libraries(meas_share common_share)
 
+AUX_SOURCE_DIRECTORY(src/graph/ graph_SRC)
+add_library(graph_share SHARED ${graph_SRC})
+
 #SET(track_SRC src/track/run_track.cc
 #              src/track/track.cc
 #              src/track/get_target.cc)
@@ -127,6 +130,7 @@ SET(track_LIBS ${Boost_LIBRARIES}
                 meas_share
                 common_share
                 tracker_share
+                graph_share
                 )
 
 #LINK_LIBRARIES(#${OpenCV_LIBS}

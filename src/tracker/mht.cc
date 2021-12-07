@@ -73,20 +73,27 @@ void MHT::run(const float& t, const vector<Eigen::VectorXf>& meas){
     #ifdef USE_DEBUG
         LOG_INFO("current hypothesis size {}", leaves.size());
     #endif
+    
+    vector<vector<int>> conflict_hypo_ids;
+    TrackTree::getConflictHypos(leaves, conflict_hypo_ids, _params._N_SCAN);
+
+    mht_graph::weightedGraph weighted_graph;
     int curr_hypos_size = leaves.size();
     for(int i = 0; i < curr_hypos_size; i++){
         #ifdef USE_DEBUG
             LOG_INFO("Hypo ID:{}, histories: {}", leaves[i]->_track_id, fmt::join(leaves[i]->_track_history, " -> "));
         #endif
+
+        auto& target = leaves[i]->_target;
+        weighted_graph.addWeightedVertex(i, target->getTrackScore());
     }
-
-    vector<vector<int>> conflict_hypo_ids;
-    TrackTree::getConflictHypos(leaves, conflict_hypo_ids, _params._N_SCAN);
-
-    int purn_scan = std::max(MHT::SCAN_K - _params._N_SCAN, 0);
-
+    weighted_graph.setEdges(conflict_hypo_ids);
     
+    vector<int> global_optimal_hypos;
+    weighted_graph.getMWIS(weighted_graph, global_optimal_hypos);
 
+
+    // int purn_scan = std::max(MHT::SCAN_K - _params._N_SCAN, 0);
 
     MHT::addScanCount();
 }

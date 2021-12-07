@@ -12,6 +12,7 @@
 
 #include "log/log.h"
 #include "common/utils.h"
+#include "graph/weightgraph.h"
 #include "tracker/mhtparam.h"
 #include "tracker/tracktree.h"
 
