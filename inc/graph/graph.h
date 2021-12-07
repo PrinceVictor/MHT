@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <map>
+#include <utility>
 
 #include "log/log.h"
 
@@ -14,6 +15,7 @@ namespace mht_graph {
 
 using std::vector;
 using std::map;
+using std::pair;
 
 class Graph {
 
@@ -27,13 +29,17 @@ public:
 
     void setEdges(const vector<vector<int>>& edges);
 
-    void complementGraph();
+    void calComplementGraph();
+
+    void calVertexDegrees(vector<pair<int, int>>& degrees);
 
 public:
 
     vector<int> _vertex;
 
     vector<vector<int>> _edges;
+
+    vector<vector<int>> _complement;
 
 };
 

@@ -5,10 +5,14 @@
 #ifndef MHT_WEIGHT_GRAPH_H
 #define MHT_WEIGHT_GRAPH_H
 
+#include <set>
+
 #include "log/log.h"
 #include "graph/graph.h"
 
 namespace mht_graph {
+
+using std::set;
 
 class weightedGraph: public Graph {
 
@@ -22,6 +26,12 @@ public:
 
     //Maximum Weighted Independent Set of Graph
     static void getMWIS(weightedGraph& wgraph, vector<int>& optimals);
+
+    static void bronKerbosh3(weightedGraph& wgraph);
+
+    static void getNeighbors();
+
+    static void degeneracyOrder(weightedGraph& wgraph, vector<int>& order);
 
 private:
 
