@@ -99,7 +99,7 @@ void TrackTree::trackCount(){
 
 void TrackTree::getLeaves(const MyTrack& root, vector<MyTrack>& result, const int& dim){
 
-    if(root->_scan_k == dim){
+    if(root->_scan_k == dim && !root->_target->isDead()){
         result.emplace_back(root);
         return;
     }
