@@ -51,11 +51,17 @@ public:
 
     void inherit(const int flag);
 
-    void addChild(shared_ptr<TrackTree>& child);
+    static MyTrack getParent(MyTrack child, const int& scan_k);
 
     static void getLeaves(const MyTrack& root, vector<MyTrack>& result, const int& dim);
 
     static void getConflictHypos(const vector<MyTrack>& hypos, vector<vector<int>>& conflict_ids, const int& N_scan);
+
+    static void deleteTrees(vector<MyTrack>& root, const vector<MyTrack>&best_hypos, const int& purn_scan);
+
+    static void showTrackTrees(const vector<MyTrack>& trees);
+
+    
 
 private:
 

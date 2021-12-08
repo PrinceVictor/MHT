@@ -20,6 +20,7 @@ MHT::MHT(const string& param_path):_params(param_path){
 
 MHT::~MHT(){
 
+    LOG_INFO("Destroy Multiple Hypothesis Tracker");
 }
 
 void MHT::run(const float& t, const vector<Eigen::VectorXf>& meas){
@@ -90,22 +91,29 @@ void MHT::run(const float& t, const vector<Eigen::VectorXf>& meas){
     }
     weighted_graph.setEdges(conflict_hypo_ids);
     
-    vector<int> best_hypos;
-    weighted_graph.getMWIS(weighted_graph, best_hypos);
+    vector<int> best_hypos_ids;
+    weighted_graph.getMWIS(weighted_graph, best_hypos_ids);
     #ifdef USE_DEBUG
         printf("\n");
-        LOG_INFO("Best Hypo size {}", best_hypos.size());
+        LOG_INFO("Best Hypo size {}", best_hypos_ids.size());
     #endif
+    vector<MyTrack> best_hypos(best_hypos_ids.size());
     for(int i = 0; i < best_hypos.size(); i++){
-        auto& hypo = leaves[best_hypos[i]];
+        best_hypos[i] = leaves[best_hypos_ids[i]];
         #ifdef USE_DEBUG
             LOG_INFO("Best Hypo ID: {} track ID: {}, histories: {}, Hypo score: {:.3f}",
-                     best_hypos[i], hypo->_track_id, fmt::join(hypo->_track_history, " -> "), hypo->_target->getTrackScore());
+                     best_hypos_ids[i], best_hypos[i]->_track_id, fmt::join(best_hypos[i]->_track_history, " -> "), best_hypos[i]->_target->getTrackScore());
         #endif
     }
 
+    int purn_scan = MHT::SCAN_K - _params._N_SCAN;
+    TrackTree::deleteTrees(_track_trees, best_hypos, purn_scan);
+    
+    #ifdef USE_DEBUG
+        printf("\n");
+    #endif
+    TrackTree::showTrackTrees(_track_trees);
 
-    // int purn_scan = std::max(MHT::SCAN_K - _params._N_SCAN, 0);
 
     MHT::addScanCount();
 }

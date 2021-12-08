@@ -34,6 +34,10 @@ int main(int argc, char *argv[]){
         MHT_tracker->run(t_now, meas);
     }
 
+    LOG_INFO("FINISHED!");
+    
+    MHT_tracker.reset();
+
     google::ShutdownGoogleLogging();
 
     return 0;

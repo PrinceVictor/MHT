@@ -71,7 +71,10 @@ void initParams(const MHTParams& params){
 
 TrackTree::~TrackTree(){
 
-    std::cout<< "delete tree" << std::endl;
+    #ifdef USE_DEBUG
+        LOG_INFO("Scan: {} Track ID: {}, histories: {}, Hypo score: {:.3f}",
+                 _scan_k, _track_id, fmt::join(_track_history, " -> "), _target->getTrackScore());
+    #endif
 }
 
 void TrackTree::predict(){
@@ -86,10 +89,6 @@ void TrackTree::predict(){
 void TrackTree::update(const int flag, MyTrack& parent, const int& detect_id, const Eigen::VectorXf& meas){
 
     _children.emplace_back(make_shared<TrackTree>(flag, parent, detect_id, meas));
-
-}
-
-void TrackTree::addChild(shared_ptr<TrackTree>& child){
 
 }
 
@@ -126,7 +125,7 @@ void TrackTree::getConflictHypos(const vector<MyTrack>& hypos, vector<vector<int
                 
                 int k = std::max((int)(left.size()-N_scan), 0);
                 for(; k<left.size(); k++){
-                    if(left[k] == right[k]){
+                    if(left[k] != 0 && right[k] != 0 && left[k] == right[k]){
                         conflict_ids.emplace_back(vector<int>{i, j});
                         break;
                     }
@@ -134,7 +133,65 @@ void TrackTree::getConflictHypos(const vector<MyTrack>& hypos, vector<vector<int
             }
         }
     }
-    
 }
+
+void TrackTree::deleteTrees(vector<MyTrack>& root, const vector<MyTrack>& best_hypos, const int& purn_scan){
+
+    if(purn_scan <1) return;
+    // vector<MyTrack> purn_scan_trees;
+    // for(auto it: root) getLeaves(it, purn_scan_trees, purn_scan);
+    LOG_INFO("Purn the Trees in SCAN: {}", purn_scan);
+
+    for(int i=0; i<best_hypos.size(); i++){
+        int detect_id = best_hypos[i]->_track_history[purn_scan-1];
+        #ifdef USE_DEBUG
+            LOG_INFO("Keep Hypo Scan: {} track ID: {}, histories: {}, Hypo score: {:.3f}",
+                     best_hypos[i]->_scan_k, best_hypos[i]->_track_id, fmt::join(best_hypos[i]->_track_history, " -> "), best_hypos[i]->_target->getTrackScore());
+        #endif
+
+        for(int j=0; j<root.size(); j++){    
+            #ifdef USE_DEBUG
+                LOG_INFO("To Delete Scan: {} track ID: {}, histories: {}, Hypo score: {:.3f}",
+                          root[i]->_scan_k, root[j]->_track_id, fmt::join(root[j]->_track_history, " -> "), root[j]->_target->getTrackScore());
+            #endif
+
+            if(root[j]->_scan_k > purn_scan) {
+                j++; continue;
+            }
+            else if(best_hypos[i]->_track_id == root[j]->_track_id){
+                auto& root_children = root[j]->_children;
+                for(int k=0; k<root_children.size(); k++){
+                    if(root_children[k]==getParent(best_hypos[i], purn_scan+1)){
+                        root[j] = root_children[k];
+                    }
+                }
+                j++;
+            }
+            else if(detect_id = root[j]->_track_history[purn_scan-1]){
+                root.erase(root.begin()+i);
+                continue;
+            }
+        }
+    }
+}
+
+MyTrack TrackTree::getParent(MyTrack child, const int& scan_k){
+
+    while(child && child->_scan_k != scan_k){
+        child = child->_parent.lock();
+    }
+    return child;
+}
+
+void TrackTree::showTrackTrees(const vector<MyTrack>& trees){
     
+    for(auto tree : trees){
+        #ifdef USE_DEBUG
+            LOG_INFO("Scan: {} track ID: {}, histories: {}, Hypo score: {:.3f}",
+                      tree->_scan_k, tree->_track_id, fmt::join(tree->_track_history, " -> "), tree->_target->getTrackScore());
+        #endif
+        showTrackTrees(tree->_children);
+    }
+}
+
 }
