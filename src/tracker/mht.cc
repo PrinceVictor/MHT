@@ -81,7 +81,7 @@ void MHT::run(const float& t, const vector<Eigen::VectorXf>& meas){
     int curr_hypos_size = leaves.size();
     for(int i = 0; i < curr_hypos_size; i++){
         #ifdef USE_DEBUG
-            LOG_INFO("Hypo ID:{}, histories: {}", leaves[i]->_track_id, fmt::join(leaves[i]->_track_history, " -> "));
+            LOG_INFO("Hypo ID:{} Track ID:{}, histories: {}", i, leaves[i]->_track_id, fmt::join(leaves[i]->_track_history, " -> "));
         #endif
 
         auto& target = leaves[i]->_target;
@@ -89,8 +89,18 @@ void MHT::run(const float& t, const vector<Eigen::VectorXf>& meas){
     }
     weighted_graph.setEdges(conflict_hypo_ids);
     
-    vector<int> global_optimal_hypos;
-    weighted_graph.getMWIS(weighted_graph, global_optimal_hypos);
+    vector<int> best_hypos;
+    weighted_graph.getMWIS(weighted_graph, best_hypos);
+    #ifdef USE_DEBUG
+        printf("\n");
+        LOG_INFO("Best Hypo size {}", best_hypos.size());
+    #endif
+    for(int i = 0; i < best_hypos.size(); i++){
+        auto& hypo = leaves[best_hypos[i]];
+        #ifdef USE_DEBUG
+            LOG_INFO("Best Hypo ID:{} track ID:{}, histories: {}", best_hypos[i], hypo->_track_id, fmt::join(hypo->_track_history, " -> "));
+        #endif
+    }
 
 
     // int purn_scan = std::max(MHT::SCAN_K - _params._N_SCAN, 0);

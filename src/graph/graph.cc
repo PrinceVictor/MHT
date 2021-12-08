@@ -34,12 +34,12 @@ void Graph::calComplementGraph(){
     }
 }
 
-void Graph::calVertexDegrees(vector<pair<int, int>>& degrees){
+void Graph::calVertexDegrees(const vector<vector<int>>& g, vector<pair<int, int>>& degrees){
 
-    degrees.resize(_complement.size());
-    for(int i=0; i<_complement.size(); i++){
+    degrees.resize(g.size());
+    for(int i=0; i<g.size(); i++){
         int sum=0;
-        for(auto it:_complement[i]){
+        for(auto it:g[i]){
             sum += it;
         }
         degrees[i].first = i;

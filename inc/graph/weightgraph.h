@@ -6,9 +6,12 @@
 #define MHT_WEIGHT_GRAPH_H
 
 #include <set>
+#include <algorithm>
 
 #include "log/log.h"
 #include "graph/graph.h"
+
+#include "common/random.h"
 
 namespace mht_graph {
 
@@ -25,13 +28,16 @@ public:
     void addWeightedVertex(const int& vertex, const float& weight);
 
     //Maximum Weighted Independent Set of Graph
-    static void getMWIS(weightedGraph& wgraph, vector<int>& optimals);
+    static void getMWIS(weightedGraph& wgraph, vector<int>& result);
 
-    static void bronKerbosh3(weightedGraph& wgraph);
+    static void bronKerbosh3(weightedGraph& wgraph, vector<int>& result);
 
-    static void getNeighbors();
+    static void bronKerbosh2(const set<int>& R, set<int> P, set<int> X, 
+                             const vector<vector<int>>& g, vector<int>& result);
 
-    static void degeneracyOrder(weightedGraph& wgraph, vector<int>& order);
+    static void getNeighbors(const int& v, const vector<vector<int>>& g, set<int>& n);
+
+    static void degeneracyOrder(const vector<vector<int>>& g, vector<int>& order);
 
 private:
 
@@ -39,6 +45,10 @@ private:
 
 
 };
+
+set<int> operator - (const set<int>& a, const set<int>& b);
+set<int> operator | (const set<int>& a, const set<int>& b);
+set<int> operator & (const set<int>& a, const set<int>& b);
 
 }
 

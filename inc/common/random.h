@@ -25,10 +25,19 @@ public:
         if(num < 1) return;
 
         result.resize(num);
-        std::uniform_real_distribution<T> distribution(min,max);
-        for(int i = 0; i < num; ++i){
-            result[i] = distribution(Random::_random_engine);
+        if(typeid(T) == typeid(int)){
+            std::uniform_int_distribution<int> distribution((int)min, (int)max);
+            for(int i = 0; i < num; ++i){
+                result[i] = distribution(Random::_random_engine);
+            }
         }
+        else{
+            std::uniform_real_distribution<float> distribution(min,max);
+            for(int i = 0; i < num; ++i){
+                result[i] = distribution(Random::_random_engine);
+            }
+        }
+        
     }
 
     template<typename T>

@@ -31,7 +31,7 @@ public:
 
     void calComplementGraph();
 
-    void calVertexDegrees(vector<pair<int, int>>& degrees);
+    static void calVertexDegrees(const vector<vector<int>>& g, vector<pair<int, int>>& degrees);
 
 public:
 
