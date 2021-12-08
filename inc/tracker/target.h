@@ -37,6 +37,8 @@ public:
 
     void missDetection();
 
+    void updateTrackScore();
+
     float getTrackScore(); 
 
     bool isDead();

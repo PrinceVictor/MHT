@@ -123,7 +123,7 @@ void TrackTree::getConflictHypos(const vector<MyTrack>& hypos, vector<vector<int
                 auto& left = hypos[i]->_track_history;
                 auto& right = hypos[j]->_track_history;
                 
-                int k = std::max((int)(left.size()-N_scan), 0);
+                int k = std::max((int)(left.size()-N_scan-1), 0);
                 for(; k<left.size(); k++){
                     if(left[k] != 0 && right[k] != 0 && left[k] == right[k]){
                         conflict_ids.emplace_back(vector<int>{i, j});
@@ -135,7 +135,7 @@ void TrackTree::getConflictHypos(const vector<MyTrack>& hypos, vector<vector<int
     }
 }
 
-void TrackTree::deleteTrees(vector<MyTrack>& root, const vector<MyTrack>& best_hypos, const int& purn_scan){
+void TrackTree::deleteConflictTrees(vector<MyTrack>& root, const vector<MyTrack>& best_hypos, const int& purn_scan){
 
     if(purn_scan <1) return;
     // vector<MyTrack> purn_scan_trees;
@@ -150,30 +150,63 @@ void TrackTree::deleteTrees(vector<MyTrack>& root, const vector<MyTrack>& best_h
         #endif
 
         for(int j=0; j<root.size();){    
-            #ifdef USE_DEBUG
-                LOG_INFO("To Delete Scan: {} track ID: {}, histories: {}, Hypo score: {:.3f}",
-                          root[j]->_scan_k, root[j]->_track_id, fmt::join(root[j]->_track_history, " -> "), root[j]->_target->getTrackScore());
-            #endif
 
             if(root[j]->_scan_k > purn_scan) {
                 j++; continue;
             }
             else if(best_hypos[i]->_track_id == root[j]->_track_id){
+                #ifdef USE_DEBUG
+                    LOG_INFO("To Delete Scan: {} track ID: {}, histories: {}, Hypo score: {:.3f}",
+                    root[j]->_scan_k, root[j]->_track_id, fmt::join(root[j]->_track_history, " -> "), root[j]->_target->getTrackScore());
+                #endif
                 auto& root_children = root[j]->_children;
                 for(int k=0; k<root_children.size(); k++){
                     if(root_children[k]==getParent(best_hypos[i], purn_scan+1)){
                         root[j] = root_children[k];
-                        LOG_INFO("Exchange");
                     }
                 }
             }
             else if(detect_id == root[j]->_track_history[purn_scan-1]){
+                #ifdef USE_DEBUG
+                    LOG_INFO("To Delete Scan: {} track ID: {}, histories: {}, Hypo score: {:.3f}",
+                    root[j]->_scan_k, root[j]->_track_id, fmt::join(root[j]->_track_history, " -> "), root[j]->_target->getTrackScore());
+                #endif
+                
                 root.erase(root.begin()+j);
                 continue;
             }
             j++;
         }
     }
+
+    for(int i=0; i<root.size(); ){
+        if(root[i]->_scan_k == purn_scan){
+            #ifdef USE_DEBUG
+                LOG_INFO("Delete Old Hypo Scan: {} track ID: {}, histories: {}, Hypo score: {:.3f}",
+                        root[i]->_scan_k, root[i]->_track_id, fmt::join(root[i]->_track_history, " -> "), root[i]->_target->getTrackScore());
+            #endif
+            root.erase(root.begin()+i);
+        }
+        else i++;
+    }
+}
+
+void TrackTree::deleteDeadTrees(vector<MyTrack>& roots){
+    for(int i=0; i<roots.size();){
+        if(roots[i]->_target->isDead()){
+
+            #ifdef USE_DEBUG
+                LOG_INFO("Delete Dead Hypo Scan: {} track ID: {}, histories: {}, Hypo score: {:.3f}",
+                          roots[i]->_scan_k, roots[i]->_track_id, fmt::join(roots[i]->_track_history, " -> "), roots[i]->_target->getTrackScore());
+            #endif
+            roots.erase(roots.begin()+i);
+        }
+        else{
+            deleteDeadTrees(roots[i]->_children);
+            i++;
+        }
+    }
+
 }
 
 MyTrack TrackTree::getParent(MyTrack child, const int& scan_k){

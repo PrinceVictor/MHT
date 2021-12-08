@@ -24,8 +24,6 @@ int main(int argc, char *argv[]){
 
     auto measures = measurement->get_measurements();
 
-    // MHT_tracker->test();
-
     for(auto it=measures.begin(); it!=measures.end(); it++){
 
         auto t_now = it->first;

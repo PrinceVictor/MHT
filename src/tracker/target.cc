@@ -37,6 +37,8 @@ void Target::initTrackScore(const float& p_d, const float& ts_del, const float& 
     _llr_conf_thres = log(ts_conf);
 
     _log_beta_fa = log(p_fa/volume);
+
+    updateTrackScore();
 }
 
 void Target::predictLLR(){
@@ -57,14 +59,15 @@ void Target::updateLLR(const Eigen::VectorXf& meas){
             //         << 0.5 * getMahDis2() << '\t' << 0.5 * log(getDeterminS()) << std::endl;
             LOG_INFO("D2 {:.3f} In Gate!, Track score {:.3f}", _d2, _track_score);
         #endif
+        updateTrackScore();
     }
     else{
-        _track_score = INT_MIN;
+        _track_score = _llr_del_thres*10;
         
         #ifdef USE_DEBUG
             LOG_INFO("D2 {:.3f} OUt Gate!, Track score {:.3f}", _d2, _track_score);
         #endif
-    }   
+    }
 }
 
 void Target::missDetection(){
@@ -75,6 +78,14 @@ void Target::missDetection(){
     #ifdef USE_DEBUG
         LOG_INFO("Miss Detection!, Track score {:.3f}", _track_score);
     #endif
+    updateTrackScore();
+}
+
+void Target::updateTrackScore(){
+
+    _track_score = std::min(_track_score, _llr_conf_thres);
+    _track_score = std::max(_track_score, float(_llr_del_thres-0.05));
+    // LOG_INFO("Track score Upper: {:.3f} Lower: {:.3f}", _llr_conf_thres, _llr_del_thres);
 }
 
 float Target::getTrackScore(){

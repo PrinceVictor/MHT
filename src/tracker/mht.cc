@@ -79,10 +79,10 @@ void MHT::run(const float& t, const vector<Eigen::VectorXf>& meas){
     mht_graph::weightedGraph weighted_graph;
     int curr_hypos_size = leaves.size();
     for(int i = 0; i < curr_hypos_size; i++){
-        // #ifdef USE_DEBUG
-        //     LOG_INFO("Hypo ID: {} track ID: {}, histories: {}, Hypo score: {:.3f}",
-        //              i, leaves[i]->_track_id, fmt::join(leaves[i]->_track_history, " -> "), leaves[i]->_target->getTrackScore());
-        // #endif
+        #ifdef USE_DEBUG
+            LOG_INFO("Hypo ID: {} track ID: {}, histories: {}, Hypo score: {:.3f}",
+                     i, leaves[i]->_track_id, fmt::join(leaves[i]->_track_history, " -> "), leaves[i]->_target->getTrackScore());
+        #endif
 
         auto& target = leaves[i]->_target;
         weighted_graph.addWeightedVertex(i, target->getTrackScore());
@@ -91,30 +91,41 @@ void MHT::run(const float& t, const vector<Eigen::VectorXf>& meas){
     
     vector<int> best_hypos_ids;
     weighted_graph.getMWIS(weighted_graph, best_hypos_ids);
+    
     #ifdef USE_DEBUG
         printf("\n");
-        LOG_INFO("Best Hypo size {}", best_hypos_ids.size());
     #endif
+
     LOG_INFO("Best Hypo size {}", best_hypos_ids.size());
-    vector<MyTrack> best_hypos(best_hypos_ids.size());
-    for(int i = 0; i < best_hypos.size(); i++){
-        best_hypos[i] = leaves[best_hypos_ids[i]];
-        #ifdef USE_DEBUG
-            LOG_INFO("Best Hypo ID: {} track ID: {}, histories: {}, Hypo score: {:.3f}",
-                     best_hypos_ids[i], best_hypos[i]->_track_id, fmt::join(best_hypos[i]->_track_history, " -> "), best_hypos[i]->_target->getTrackScore());
-        #endif
+    vector<MyTrack> best_hypos;
+    for(int i = 0; i < best_hypos_ids.size(); i++){
+        if(!leaves[best_hypos_ids[i]]->_target->isDead()){
+            best_hypos.emplace_back(leaves[best_hypos_ids[i]]);
+            #ifdef USE_DEBUG
+                LOG_INFO("Best Hypo ID: {} track ID: {}, histories: {}, Hypo score: {:.3f}",
+                         best_hypos_ids[i], best_hypos.back()->_track_id, fmt::join(best_hypos.back()->_track_history, " -> "), best_hypos.back()->_target->getTrackScore());
+            #endif
+        }
     }
     leaves.clear();
     #ifdef USE_DEBUG
         printf("\n");
+        TrackTree::showTrackTrees(_track_trees);
     #endif
-    TrackTree::showTrackTrees(_track_trees);
+    
+    TrackTree::deleteDeadTrees(_track_trees);
+    
+    #ifdef USE_DEBUG
+        printf("\n");
+        TrackTree::showTrackTrees(_track_trees);
+    #endif
+
 
     #ifdef USE_DEBUG
         printf("\n");
     #endif
     int purn_scan = MHT::SCAN_K - _params._N_SCAN;
-    TrackTree::deleteTrees(_track_trees, best_hypos, purn_scan);
+    TrackTree::deleteConflictTrees(_track_trees, best_hypos, purn_scan);
 
     
     #ifdef USE_DEBUG

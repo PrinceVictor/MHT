@@ -57,9 +57,11 @@ public:
 
     static void getConflictHypos(const vector<MyTrack>& hypos, vector<vector<int>>& conflict_ids, const int& N_scan);
 
-    static void deleteTrees(vector<MyTrack>& root, const vector<MyTrack>&best_hypos, const int& purn_scan);
+    static void deleteConflictTrees(vector<MyTrack>& root, const vector<MyTrack>&best_hypos, const int& purn_scan);
 
     static void showTrackTrees(const vector<MyTrack>& trees);
+
+    static void deleteDeadTrees(vector<MyTrack>& leaves);
 
     
 
