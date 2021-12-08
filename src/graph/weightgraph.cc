@@ -18,6 +18,8 @@ void weightedGraph::addWeightedVertex(const int& vertex, const float& weight){
 
 void weightedGraph::getMWIS(weightedGraph& wgraph, vector<int>& result){
 
+    LOG_INFO("Calculate Weighted Indepent Sets");
+
     wgraph.calComplementGraph();
 
     vector<vector<int>> ind_sets;

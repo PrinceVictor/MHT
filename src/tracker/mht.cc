@@ -70,10 +70,8 @@ void MHT::run(const float& t, const vector<Eigen::VectorXf>& meas){
     for(int i = 0; i < _track_trees.size(); i++){
         TrackTree::getLeaves(_track_trees[i], leaves, MHT::SCAN_K);
     }
-
-    #ifdef USE_DEBUG
-        LOG_INFO("current hypothesis size {}", leaves.size());
-    #endif
+    
+    LOG_INFO("current hypothesis size {}", leaves.size());
     
     vector<vector<int>> conflict_hypo_ids;
     TrackTree::getConflictHypos(leaves, conflict_hypo_ids, _params._N_SCAN);
@@ -81,10 +79,10 @@ void MHT::run(const float& t, const vector<Eigen::VectorXf>& meas){
     mht_graph::weightedGraph weighted_graph;
     int curr_hypos_size = leaves.size();
     for(int i = 0; i < curr_hypos_size; i++){
-        #ifdef USE_DEBUG
-            LOG_INFO("Hypo ID: {} track ID: {}, histories: {}, Hypo score: {:.3f}",
-                     i, leaves[i]->_track_id, fmt::join(leaves[i]->_track_history, " -> "), leaves[i]->_target->getTrackScore());
-        #endif
+        // #ifdef USE_DEBUG
+        //     LOG_INFO("Hypo ID: {} track ID: {}, histories: {}, Hypo score: {:.3f}",
+        //              i, leaves[i]->_track_id, fmt::join(leaves[i]->_track_history, " -> "), leaves[i]->_target->getTrackScore());
+        // #endif
 
         auto& target = leaves[i]->_target;
         weighted_graph.addWeightedVertex(i, target->getTrackScore());
@@ -97,6 +95,7 @@ void MHT::run(const float& t, const vector<Eigen::VectorXf>& meas){
         printf("\n");
         LOG_INFO("Best Hypo size {}", best_hypos_ids.size());
     #endif
+    LOG_INFO("Best Hypo size {}", best_hypos_ids.size());
     vector<MyTrack> best_hypos(best_hypos_ids.size());
     for(int i = 0; i < best_hypos.size(); i++){
         best_hypos[i] = leaves[best_hypos_ids[i]];
@@ -105,9 +104,18 @@ void MHT::run(const float& t, const vector<Eigen::VectorXf>& meas){
                      best_hypos_ids[i], best_hypos[i]->_track_id, fmt::join(best_hypos[i]->_track_history, " -> "), best_hypos[i]->_target->getTrackScore());
         #endif
     }
+    leaves.clear();
+    #ifdef USE_DEBUG
+        printf("\n");
+    #endif
+    TrackTree::showTrackTrees(_track_trees);
 
+    #ifdef USE_DEBUG
+        printf("\n");
+    #endif
     int purn_scan = MHT::SCAN_K - _params._N_SCAN;
     TrackTree::deleteTrees(_track_trees, best_hypos, purn_scan);
+
     
     #ifdef USE_DEBUG
         printf("\n");
