@@ -46,7 +46,7 @@ void MHT::run(const float& t, const vector<Eigen::VectorXf>& meas){
     for(int i = 0; i < last_tracks_num; i++){
         leaves[i]->update(MISS_DETECTION, leaves[i]);
     }
-    
+
     for(int i = 0; i < meas.size(); i++){
         
         LOG_INFO("meas id:{}  pos x:{:.2f}, y:{:.2f}", i+1, meas[i](0), meas[i](1));
@@ -81,7 +81,8 @@ void MHT::run(const float& t, const vector<Eigen::VectorXf>& meas){
     int curr_hypos_size = leaves.size();
     for(int i = 0; i < curr_hypos_size; i++){
         #ifdef USE_DEBUG
-            LOG_INFO("Hypo ID:{} Track ID:{}, histories: {}", i, leaves[i]->_track_id, fmt::join(leaves[i]->_track_history, " -> "));
+            LOG_INFO("Hypo ID: {} track ID: {}, histories: {}, Hypo score: {:.3f}",
+                     i, leaves[i]->_track_id, fmt::join(leaves[i]->_track_history, " -> "), leaves[i]->_target->getTrackScore());
         #endif
 
         auto& target = leaves[i]->_target;
@@ -98,7 +99,8 @@ void MHT::run(const float& t, const vector<Eigen::VectorXf>& meas){
     for(int i = 0; i < best_hypos.size(); i++){
         auto& hypo = leaves[best_hypos[i]];
         #ifdef USE_DEBUG
-            LOG_INFO("Best Hypo ID:{} track ID:{}, histories: {}", best_hypos[i], hypo->_track_id, fmt::join(hypo->_track_history, " -> "));
+            LOG_INFO("Best Hypo ID: {} track ID: {}, histories: {}, Hypo score: {:.3f}",
+                     best_hypos[i], hypo->_track_id, fmt::join(hypo->_track_history, " -> "), hypo->_target->getTrackScore());
         #endif
     }
 

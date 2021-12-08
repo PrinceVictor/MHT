@@ -91,7 +91,7 @@ void Measurement::generateNoises(){
 
             _noises[i][j] = temp_noise_pos;
             #ifdef USE_DEBUG
-                LOG_INFO("Noise id:{} time:{} x:{:.3f} y{:.3f}", j, i,  _noises[i][j](0),  _noises[i][j](1));
+                LOG_INFO("Time:{} Noise id:{}  x:{:.3f} y{:.3f}", i, j, _noises[i][j](0),  _noises[i][j](1));
             #endif
         }
     }
@@ -114,19 +114,20 @@ void Measurement::generateTarget(){
     _targets.assign(sample_num, vector<Eigen::VectorXf>(target_num, Eigen::VectorXf(scene_dim*2)));
     auto motion_trans_mat = mht_common::Motion::CV(scene_dim, delta_t);
     
-    for(int i=0; i<target_num; i++){
-        for(int j=0; j<sample_num; j++){
-            if(j == 0){
+    
+    for(int i=0; i<sample_num; i++){
+        for(int j=0; j<target_num; j++){
+            if(i == 0){
                 for(int k=0; k<scene_dim; k++){
-                    _targets[j][i](k) = init_target_pos[k+i*scene_dim];
-                    _targets[j][i](k+scene_dim) = init_target_veloc[k+i*scene_dim];
+                    _targets[i][j](k) = init_target_pos[k+j*scene_dim];
+                    _targets[i][j](k+scene_dim) = init_target_veloc[k+j*scene_dim];
                 }
             }
             else{
-                _targets[j][i] = motion_trans_mat*_targets[j-1][i];
+                _targets[i][j] = motion_trans_mat*_targets[i-1][j];
             }
             #ifdef USE_DEBUG
-                LOG_INFO("Target id:{} time:{} x:{:.3f} y{:.3f}", i, j,  _targets[j][i](0),  _targets[j][i](1));
+                LOG_INFO("Time:{} Target id:{} x:{:.3f} y{:.3f}", j, i, _targets[i][j](0), _targets[i][j](1));
             #endif
         }
     }

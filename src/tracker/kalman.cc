@@ -53,13 +53,11 @@ bool Kalman::update(const Eigen::VectorXf& meas){
     auto y_tilde = innovation(meas);
     auto S = residualCovarianceMat();
     auto inv_S = S.inverse();
-    auto _deta_s = S.determinant();
+    _det_S = S.determinant();
 
     _d2 = y_tilde.transpose()*inv_S*y_tilde;
 
-    #ifdef USE_DEBUG
-        LOG_INFO("D2 {:.3f}", _d2);
-    #endif
+    
 
     if(_d2 <= _d_gate){
     

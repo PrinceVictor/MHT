@@ -17,6 +17,8 @@ namespace mht_graph {
 
 using std::set;
 
+typedef set<int> mySet;
+
 class weightedGraph: public Graph {
 
 public:
@@ -30,12 +32,12 @@ public:
     //Maximum Weighted Independent Set of Graph
     static void getMWIS(weightedGraph& wgraph, vector<int>& result);
 
-    static void bronKerbosh3(weightedGraph& wgraph, vector<int>& result);
+    static void bronKerbosh3(weightedGraph& wgraph, vector<vector<int>>& result);
 
-    static void bronKerbosh2(const set<int>& R, set<int> P, set<int> X, 
-                             const vector<vector<int>>& g, vector<int>& result);
+    static void bronKerbosh2(const mySet& R, mySet P, mySet X, 
+                             const vector<vector<int>>& g, vector<vector<int>>& result);
 
-    static void getNeighbors(const int& v, const vector<vector<int>>& g, set<int>& n);
+    static void getNeighbors(const int& v, const vector<vector<int>>& g, mySet& n);
 
     static void degeneracyOrder(const vector<vector<int>>& g, vector<int>& order);
 
@@ -46,9 +48,9 @@ private:
 
 };
 
-set<int> operator - (const set<int>& a, const set<int>& b);
-set<int> operator | (const set<int>& a, const set<int>& b);
-set<int> operator & (const set<int>& a, const set<int>& b);
+mySet operator - (const mySet& a, const mySet& b);
+mySet operator | (const mySet& a, const mySet& b);
+mySet operator & (const mySet& a, const mySet& b);
 
 }
 

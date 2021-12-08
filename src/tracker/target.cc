@@ -51,16 +51,18 @@ void Target::updateLLR(const Eigen::VectorXf& meas){
         float delat_LLR = _log_p_d - _log_beta_fa - meas.size()*0.5*log(2*PI) - \
                           0.5 * getMahDis2() - 0.5 * log(getDeterminS()) ;
         _track_score += delat_LLR;
-
+        
         #ifdef USE_DEBUG
-            LOG_INFO("In Gate!");
+            // std::cout << _log_p_d << '\t' << _log_beta_fa << '\t' << meas.size()*0.5*log(2*PI) << '\t'
+            //         << 0.5 * getMahDis2() << '\t' << 0.5 * log(getDeterminS()) << std::endl;
+            LOG_INFO("D2 {:.3f} In Gate!, Track score {:.3f}", _d2, _track_score);
         #endif
     }
     else{
         _track_score = INT_MIN;
         
         #ifdef USE_DEBUG
-            LOG_INFO("Out Gate!");
+            LOG_INFO("D2 {:.3f} OUt Gate!, Track score {:.3f}", _d2, _track_score);
         #endif
     }   
 }
@@ -69,6 +71,10 @@ void Target::missDetection(){
     
     _X = _X_pre;
     _track_score += _llr_miss;
+    
+    #ifdef USE_DEBUG
+        LOG_INFO("Miss Detection!, Track score {:.3f}", _track_score);
+    #endif
 }
 
 float Target::getTrackScore(){

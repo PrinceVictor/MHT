@@ -40,7 +40,7 @@ TrackTree::TrackTree(const int flag, const uint scan_k, const uint detection_id,
 TrackTree::TrackTree(const int flag, MyTrack& parent, const int& detect_id, const Eigen::VectorXf& meas){
     
     _parent = parent;
-    _target = parent->_target;
+    _target = std::make_shared<Target>(*parent->_target);
     _track_history = parent->_track_history;
     _track_id = parent->_track_id;
     _scan_k = parent->_scan_k+1;
@@ -79,7 +79,7 @@ void TrackTree::predict(){
     _target->predict();
 
     #ifdef USE_DEBUG
-        LOG_INFO("Track id {} X_state x:{:.3f} y{:.3f}", _track_id, _target->_X_pre(0), _target->_X_pre(1));
+        LOG_INFO("Track id {} X_state x: {:.3f} y: {:.3f}", _track_id, _target->_X_pre(0), _target->_X_pre(1));
     #endif
 }
 
