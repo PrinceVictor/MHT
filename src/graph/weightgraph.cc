@@ -34,9 +34,9 @@ void weightedGraph::getMWIS(weightedGraph& wgraph, vector<int>& result){
     float max_weight;
     for(int i = 0; i < ind_sets.size(); i++){
         auto curr_weight = mySum(ind_sets[i]);
-        #ifdef USE_DEBUG
-            LOG_INFO("Vertexs {} Weighted {:.3f}", fmt::join(ind_sets[i], "->"), curr_weight);
-        #endif
+        // #ifdef USE_DEBUG
+        //     LOG_INFO("Vertexs {} Weighted {:.3f}", fmt::join(ind_sets[i], "->"), curr_weight);
+        // #endif
         if(curr_weight > max_weight || result.size()==0){
             max_weight = curr_weight;
             result = ind_sets[i];
