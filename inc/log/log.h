@@ -1,6 +1,8 @@
 #ifndef __LOG_H__
 #define __LOG_H__
 
+#define FMT_HEADER_ONLY
+
 #include <fmt/format.h>
 #include <glog/logging.h>
 #include <iostream>
